@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/02 12:34:15.530170
-#+ Editado:	2022/01/02 12:55:20.559068
+#+ Editado:	2022/01/02 13:13:28.302899
 # ------------------------------------------------------------------------------
 import unittest
 
@@ -12,8 +12,8 @@ from src.coinmarketcap_scrapper.coinmarketcap_scrapper import CoinMarketCap
 class TestCoinMarketCap_scrapper(unittest.TestCase):
 
     @staticmethod
-    def get_url(pax=1, moeda='eur'):
-        return f'https://coinmarketcap.com/?page={pax}&currency={moeda}'
+    def get_url(pax=1, divisa='eur'):
+        return f'https://coinmarketcap.com/?page={pax}&currency={divisa}'
 
     # Getters ------------------------------------------------------------------
 
@@ -26,13 +26,13 @@ class TestCoinMarketCap_scrapper(unittest.TestCase):
 
         self.assertEqual(cmc.get_pax(), 1)
 
-    def test_get_moeda(self):
+    def test_get_divisa(self):
         """
         Uso normal.
         """
 
         cmc = CoinMarketCap()
-        self.assertEqual(cmc.get_moeda(), 'eur')
+        self.assertEqual(cmc.get_divisa(), 'eur')
 
     def test_get_url(self):
         """
@@ -57,16 +57,16 @@ class TestCoinMarketCap_scrapper(unittest.TestCase):
         cmc.set_pax(5)
         self.assertEqual(cmc.get_pax(), 5)
 
-    def test_set_moeda(self):
+    def test_set_divisa(self):
         """
         Uso normal.
         """
 
         cmc = CoinMarketCap()
 
-        self.assertEqual(cmc.get_moeda(), 'eur')
-        cmc.set_moeda('usd')
-        self.assertEqual(cmc.get_moeda(), 'usd')
+        self.assertEqual(cmc.get_divisa(), 'eur')
+        cmc.set_divisa('usd')
+        self.assertEqual(cmc.get_divisa(), 'usd')
 
     # --------------------------------------------------------------------------
 
