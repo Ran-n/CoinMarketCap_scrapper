@@ -1,5 +1,5 @@
 '''
-info coingecko_scrapper
+info coinmarketcap_scrapper
 '''
 
 __version__ = '1.0'
