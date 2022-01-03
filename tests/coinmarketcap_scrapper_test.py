@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/02 12:34:15.530170
-#+ Editado:	2022/01/02 13:13:28.302899
+#+ Editado:	2022/01/03 19:21:00.010410
 # ------------------------------------------------------------------------------
 import unittest
 
@@ -42,6 +42,14 @@ class TestCoinMarketCap_scrapper(unittest.TestCase):
         cmc = CoinMarketCap()
         self.assertEqual(cmc.get_url(), self.get_url())
 
+    def test_get_url2(self):
+        """
+        Uso normal.
+        """
+
+        cmc = CoinMarketCap()
+        self.assertEqual(cmc.get_url(2), self.get_url(pax=2))
+
     # --------------------------------------------------------------------------
 
     # Setters ------------------------------------------------------------------
@@ -69,6 +77,19 @@ class TestCoinMarketCap_scrapper(unittest.TestCase):
         self.assertEqual(cmc.get_divisa(), 'usd')
 
     # --------------------------------------------------------------------------
+
+    # get_top ------------------------------------------------------------------
+
+    def test_get_top(self):
+        """
+        Uso normal.
+        """
+
+        cmc = CoinMarketCap()
+
+        print(cmc.get_top(100))
+
+    # get_top # ----------------------------------------------------------------
 
 # ------------------------------------------------------------------------------
 
