@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/01 20:23:55.455964
-#+ Editado:	2022/01/03 22:22:01.515007
+#+ Editado:	2022/01/05 19:45:48.735219
 # ------------------------------------------------------------------------------
 import requests as r
 #import pandas as pd
@@ -67,25 +67,31 @@ class CoinMarketCap:
         pax = 1
         lista_top = []
 
-        pax_total = ceil(topx/100)
-
-        while pax<=pax_total:
+        #while pax<=ceil(topx/100):
+        while True:
             try:
                 #df = pd.read_html(r.get(self.get_url()).text)[0]
                 soup = bs(r.get(self.get_url(pax)).text, 'html.parser')
+                taboa = soup.find('table').tbody.find_all('tr')
 
-                for indice, fila in enumerate(soup.find('table').tbody.find_all('tr')[:topx], 1):
+                xpax = len(taboa)
+
+                # pe: 123 serian 123-(100*(1-1))=123 e 123-(100*(2-1))=23
+                pasados = xpax*(pax-1)
+                tope = topx-pasados
+                for indice, fila in enumerate(taboa[:tope], 1):
                     try:
                         simbolo = fila.find(class_='crypto-symbol').text    #símbolo
                     except:
                         simbolo = fila.find(class_='coin-item-symbol').text #símbolo
 
-                    ligazon = fila.find(class_='cmc-link').get('href')  #ligazón
-                    prezo = fila.find_all('td')[3].text                 #prezo
-                    divisa = prezo[0]
-                    prezo = prezo[1:]
+                    ligazon = fila.find(class_='cmc-link').get('href')  # ligazón
+                    prezo = fila.find_all('td')[3].text                 # prezo
+                    divisa = prezo[0]                                   # divisa
+                    prezo = prezo[1:]                                   # prezo
 
-                    nome = fila.find_all('td')[2].text                  #nome
+                    # nome
+                    nome = fila.find_all('td')[2].text
                     if nome.endswith('Buy'):
                         nome = nome[:-3]
 
@@ -95,7 +101,7 @@ class CoinMarketCap:
                     while nome[-1].isdigit():
                         nome = nome[:-1]
 
-                    lista_top.append({'posicion': pax*indice,
+                    lista_top.append({'posicion': indice+pasados,
                                         'simbolo': simbolo,
                                         'nome': nome,
                                         'prezo': prezo,
@@ -103,12 +109,17 @@ class CoinMarketCap:
                                         'ligazon': ligazon})
 
                 pax+=1
+
+                # aki en lugar de no while pq asi podo sacar o xpax sen
+                # outro request idiota ou recursión
+                if pax>ceil(topx/xpax):
+                    break
             # se peta saese do bucle
             except:
                 break
 
-        gardarJson('./saida.json', lista_top[:topx])
-        return lista_top[:topx]
+        gardarJson('./saida.json', lista_top)
+        return lista_top
 
     # get_price
     def get_price(self) -> dict:
