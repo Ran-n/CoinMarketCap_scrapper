@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/03 21:05:26.106045
-#+ Editado:	2022/01/03 21:49:03.329155
+#+ Editado:	2022/01/05 21:04:48.847080
 # ------------------------------------------------------------------------------
 import requests as r
 from bs4 import BeautifulSoup as bs
@@ -14,13 +14,15 @@ def get_url(pax: int) -> str:
     return f'https://coinmarketcap.com/?page={pax}'
 
 pax = 1
+pasados = 0
 lista_moedas = []
 
 while True:
     try:
         soup = bs(r.get(get_url(pax)).text, 'html.parser')
+        taboa = soup.find('table').tbody.find_all('tr')
 
-        for indice, fila in enumerate(soup.find('table').tbody.find_all('tr')):
+        for indice, fila in enumerate(taboa, 1):
             # simbolo
             try:
                 simbolo = fila.find(class_='crypto-symbol').text
@@ -42,12 +44,13 @@ while True:
             ligazon = fila.find(class_='cmc-link').get('href')
 
             lista_moedas.append({
-                'posicion': pax*indice,
+                'posicion': indice+pasados,
                 'simbolo': simbolo,
                 'nome': nome,
                 'ligazon': ligazon
                 })
 
+        pasados += len(taboa)
         pax+=1
     except:
         gardarJson('./ligazons.json', lista_moedas)

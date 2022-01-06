@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/01 20:23:55.455964
-#+ Editado:	2022/01/05 19:45:48.735219
+#+ Editado:	2022/01/05 20:56:21.535003
 # ------------------------------------------------------------------------------
 import requests as r
 #import pandas as pd
@@ -78,7 +78,11 @@ class CoinMarketCap:
 
                 # pe: 123 serian 123-(100*(1-1))=123 e 123-(100*(2-1))=23
                 pasados = xpax*(pax-1)
-                tope = topx-pasados
+                if topx==0:
+                    tope = xpax
+                else:
+                    tope = topx-pasados
+
                 for indice, fila in enumerate(taboa[:tope], 1):
                     try:
                         simbolo = fila.find(class_='crypto-symbol').text    #símbolo
@@ -101,18 +105,20 @@ class CoinMarketCap:
                     while nome[-1].isdigit():
                         nome = nome[:-1]
 
-                    lista_top.append({'posicion': indice+pasados,
-                                        'simbolo': simbolo,
-                                        'nome': nome,
-                                        'prezo': prezo,
-                                        'divisa': divisa,
-                                        'ligazon': ligazon})
+                    lista_top.append({
+                        'posicion': indice+pasados,
+                        'simbolo': simbolo,
+                        'nome': nome,
+                        'prezo': prezo,
+                        'divisa': divisa,
+                        'ligazon': ligazon
+                        })
 
                 pax+=1
 
                 # aki en lugar de no while pq asi podo sacar o xpax sen
                 # outro request idiota ou recursión
-                if pax>ceil(topx/xpax):
+                if (pax>ceil(topx/xpax)) and (topx!=0):
                     break
             # se peta saese do bucle
             except:
