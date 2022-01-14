@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/01 20:23:55.455964
-#+ Editado:	2022/01/06 12:26:59.321754
+#+ Editado:	2022/01/14 20:00:55.409777
 # ------------------------------------------------------------------------------
 import requests as r
 #import pandas as pd
@@ -18,19 +18,15 @@ from src.coinmarketcap_scrapper.cmc_uteis import lazy_check_types
 # ------------------------------------------------------------------------------
 class CoinMarketCap:
     # atributos de clase
-    __pax: int = 1
     __url: str = 'https://coinmarketcap.com/?page='
 
     # Constructor --------------------------------------------------------------
     def __init__(self) -> None:
         # variables da instancia
-        self.__pax = self.__pax
         self.__url = self.__url
     # --------------------------------------------------------------------------
 
     # Getters ------------------------------------------------------------------
-    def get_pax(self) -> int:
-        return self.__pax
 
     def get_url(self, nova_pax: Optional[int] = 0) -> str:
         if nova_pax:
@@ -41,9 +37,6 @@ class CoinMarketCap:
     # --------------------------------------------------------------------------
 
     # Setters ------------------------------------------------------------------
-
-    def set_pax(self, nova_pax) -> None:
-        self.__pax = nova_pax
 
     # --------------------------------------------------------------------------
 
@@ -84,6 +77,9 @@ class CoinMarketCap:
                 else:
                     tope = topx-pasados
 
+                # o tope fai que o programa sexa lixeiramente máis rápido
+                # no caso de que non se requira o scrape de tódolos elementos
+                # da páxina
                 for indice, fila in enumerate(taboa[:tope], 1):
                     try:
                         simbolo = fila.find(class_='crypto-symbol').text    #símbolo
