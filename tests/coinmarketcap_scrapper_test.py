@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/02 12:34:15.530170
-#+ Editado:	2022/01/15 20:23:27.036067
+#+ Editado:	2022/01/15 20:30:01.288292
 # ------------------------------------------------------------------------------
 import unittest
 
@@ -64,14 +64,15 @@ class TestCoinMarketCap_scrapper(unittest.TestCase):
     def test_get_top(self):
         """
         Uso normal.
+        NON TEN SENTIDO PQ NON TEÑO FORMA DE COMPROBAR
         """
 
         cmc = CoinMarketCap()
 
-        #cmc.get_top('./0.json', 0)
-        #cmc.get_top('./10.json', 10)
-        #cmc.get_top('./124.json', 124)
-        #cmc.get_top('./200.json', 200)
+        #cmc.get_top(0)
+        cmc.get_top(10)
+        #cmc.get_top(124)
+        #cmc.get_top(200)
 
     # get_top # ----------------------------------------------------------------
 
@@ -80,11 +81,12 @@ class TestCoinMarketCap_scrapper(unittest.TestCase):
     def test_get_info(self):
         """
         Uso normal.
+        NON TEN SENTIDO PQ NON TEÑO FORMA DE COMPROBAR
         """
 
         cmc = CoinMarketCap()
 
-        print(cmc.get_info('shib', 'simbolo'))
+        cmc.get_info('shib', 'simbolo')
 
     # get_info # ---------------------------------------------------------------
 

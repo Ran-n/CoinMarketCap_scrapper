@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/01 20:23:55.455964
-#+ Editado:	2022/01/15 20:25:10.022696
+#+ Editado:	2022/01/15 20:28:47.203737
 # ------------------------------------------------------------------------------
 import requests as r
 import pandas as pd
@@ -53,7 +53,7 @@ class CoinMarketCap:
     # --------------------------------------------------------------------------
 
     # get_top
-    def get_top(self, nome_fich, topx: Optional[int] = 10) -> List[dict]:
+    def get_top(self, topx: Optional[int] = 10) -> List[dict]:
         """
         Devolve o top de moedas en CoinMarketCap.
 
@@ -172,7 +172,6 @@ class CoinMarketCap:
             except:
                 break
 
-        #gardarJson(nome_fich, lista_top)
         return lista_top
 
     # xFCRF devolve soamente usd, molaría para o futuro implementar outras
