@@ -3,14 +3,9 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/02 13:32:22.843158
-#+ Editado:	2022/01/15 18:40:42.097656
+#+ Editado:	2022/01/15 23:10:45.395878
 # ------------------------------------------------------------------------------
-from datetime import datetime
-from Levenshtein import distance
-
 from src.coinmarketcap_scrapper.excepcions import ErroTipado
-
-from typing import Optional
 # ------------------------------------------------------------------------------
 def lazy_check_types(varis, tipos) -> bool:
     """
