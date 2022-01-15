@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/02 12:34:15.530170
-#+ Editado:	2022/01/15 00:20:29.419088
+#+ Editado:	2022/01/15 15:03:40.240022
 # ------------------------------------------------------------------------------
 import unittest
 
@@ -68,9 +68,10 @@ class TestCoinMarketCap_scrapper(unittest.TestCase):
 
         cmc = CoinMarketCap()
 
-        cmc.get_top(0)
-        #cmc.get_top(124)
-        #cmc.get_top(200)
+        cmc.get_top('./0.json', 0)
+        #cmc.get_top('./10.json', 10)
+        #cmc.get_top('./124.json', 124)
+        #cmc.get_top('./200.json', 200)
 
     # get_top # ----------------------------------------------------------------
 

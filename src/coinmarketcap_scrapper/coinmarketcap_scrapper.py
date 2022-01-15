@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/01 20:23:55.455964
-#+ Editado:	2022/01/15 00:21:53.700178
+#+ Editado:	2022/01/15 17:37:36.230370
 # ------------------------------------------------------------------------------
 import requests as r
 #import pandas as pd
@@ -11,7 +11,7 @@ from bs4 import BeautifulSoup as bs
 from math import ceil
 from typing import Optional, List, Union
 
-from uteis.ficheiro import gardarJson
+#from uteis.ficheiro import gardarJson
 
 from src.coinmarketcap_scrapper.excepcions import ErroTipado
 from src.coinmarketcap_scrapper.cmc_uteis import lazy_check_types
@@ -48,7 +48,7 @@ class CoinMarketCap:
     # --------------------------------------------------------------------------
 
     # get_top
-    def get_top(self, topx: Optional[int] = 10) -> List[dict]:
+    def get_top(self, nome_fich, topx: Optional[int] = 10) -> List[dict]:
         """
         Devolve o top de moedas en CoinMarketCap.
 
@@ -64,8 +64,10 @@ class CoinMarketCap:
         if not lazy_check_types(topx, int):
             raise ErroTipado('O tipo da variable non entra dentro do esperado (int)')
 
+        pasados = 0
         pax = 1
         lista_top = []
+        tope = topx
 
         #while pax<=ceil(topx/100):
         while True:
@@ -75,39 +77,67 @@ class CoinMarketCap:
                 taboa = soup.find('table').tbody.find_all('tr')
 
                 xpax = len(taboa)
-
-                # esto está mal aqui, tocar
-                # pe: 123 serian 123-(100*(1-1))=123 e 123-(100*(2-1))=23
-                pasados = xpax*(pax-1)
-                if topx==0:
+                if topx == 0:
                     tope = xpax
-                else:
-                    tope = topx-pasados
 
                 # o tope fai que o programa sexa lixeiramente máis rápido
                 # no caso de que non se requira o scrape de tódolos elementos
                 # da páxina
                 for indice, fila in enumerate(taboa[:tope], 1):
+                    # simbolo
                     try:
-                        simbolo = fila.find(class_='crypto-symbol').text    #símbolo
+                        simbolo = fila.find(class_='crypto-symbol').text
                     except:
-                        simbolo = fila.find(class_='coin-item-symbol').text #símbolo
+                        try:
+                            simbolo = fila.find(class_='coin-item-symbol').text
+                        except Exception as e:
+                            raise Exception(e)
+                    # simbolo #
 
-                    ligazon = fila.find(class_='cmc-link').get('href')  # ligazón
-                    prezo = fila.find_all('td')[3].text                 # prezo
-                    divisa = prezo[0]                                   # divisa
-                    prezo = prezo[1:]                                   # prezo
+                    # ligazon
+                    try:
+                        ligazon = fila.find(class_='cmc-link').get('href')
+                    except Exception as e:
+                        raise Exception(e)
+                    # ligazon #
+
+                    # prezo
+                    try:
+                        prezo = fila.find_all('td')[3].text
+                    except Exception as e:
+                        raise Exception(e)
+                    # prezo #
+
+                    # divisa
+                    try:
+                        divisa = prezo[0]
+                    except Exception as e:
+                        raise Exception(e)
+                    # divisa #
+
+                    # prezo
+                    try:
+                        prezo = prezo[1:]
+                    except Exception as e:
+                        raise Exception(e)
+                    # prezo #
 
                     # nome
-                    nome = fila.find_all('td')[2].text
-                    if nome.endswith('Buy'):
-                        nome = nome[:-3]
+                    try:
+                        nome = fila.find_all('td')[2].text
+                        if nome.endswith('Buy'):
+                            nome = nome[:-3]
 
-                    if nome.endswith(simbolo):
-                        nome = nome[:-len(simbolo)]
+                        if nome.endswith(simbolo):
+                            nome = nome[:-len(simbolo)]
 
-                    while nome[-1].isdigit():
-                        nome = nome[:-1]
+                        # podería dar problema se fose algo tipo Moeda1 o nome
+                        if not nome.isdigit():
+                            while nome[-1].isdigit():
+                                nome = nome[:-1]
+                    except Exception as e:
+                        raise Exception(e)
+                    # nome #
 
                     lista_top.append({
                         'posicion': indice+pasados,
@@ -119,6 +149,9 @@ class CoinMarketCap:
                         })
 
                 pax+=1
+                pasados += xpax
+                if topx != 0:
+                    tope -= pasados
 
                 # aki en lugar de no while pq asi podo sacar o xpax sen
                 # outro request idiota ou recursión
@@ -128,7 +161,7 @@ class CoinMarketCap:
             except:
                 break
 
-        gardarJson('./saida.json', lista_top)
+        #gardarJson(nome_fich, lista_top)
         return lista_top
 
     # get_price
