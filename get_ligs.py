@@ -3,23 +3,50 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/03 21:05:26.106045
-#+ Editado:	2022/01/05 21:04:48.847080
+#+ Editado:	2022/01/15 13:42:22.351935
 # ------------------------------------------------------------------------------
 import requests as r
 from bs4 import BeautifulSoup as bs
+import pandas as pd
 
-from uteis.ficheiro import gardarJson
+from uteis.ficheiro import gardarJson, cargarJson
 # ------------------------------------------------------------------------------
 def get_url(pax: int) -> str:
     return f'https://coinmarketcap.com/?page={pax}'
 
+def sair() -> None:
+    gardarJson('./ligazons.json', lista_moedas)
+# ------------------------------------------------------------------------------
+DEBUG = True
+BUXA = False
+
 pax = 1
 pasados = 0
-lista_moedas = []
+lista_moedas = cargarJson('./ligazons.json')
+# se non existe o ficheiro inicializase como diccionario
+if lista_moedas == {}:
+    BUXA = True
+    lista_moedas = []
+
+"""
+Decidiuse pasar desta implementación por ser 1µs máis lento.
+[True for ele in lista_moedas if simbolo in ele.values()][0]
+"""
+df_moedas = pd.DataFrame.from_dict(lista_moedas)
 
 while True:
+    if DEBUG: print(f'Escrapeando a páxina {pax}', end='\r')
+
     try:
-        soup = bs(r.get(get_url(pax)).text, 'html.parser')
+        paxina_web = r.get(get_url(pax))
+
+        if paxina_web.status_code == 404:
+            if DEBUG: print('Máximo de paxs alcanzado.')
+            if DEBUG: print(f'Escrapeadas un total de {pax-1} páxinas')
+            sair()
+            break
+
+        soup = bs(paxina_web.text, 'html.parser')
         taboa = soup.find('table').tbody.find_all('tr')
 
         for indice, fila in enumerate(taboa, 1):
@@ -27,33 +54,56 @@ while True:
             try:
                 simbolo = fila.find(class_='crypto-symbol').text
             except:
-                simbolo = fila.find(class_='coin-item-symbol').text
+                try:
+                    simbolo = fila.find(class_='coin-item-symbol').text
+                except Exception as e:
+                    if DEBUG: print(f'Erro en simbolo: {e}')
+                    simbolo = 'Erro'
+            # simbolo #
 
             # nome
-            nome = fila.find_all('td')[2].text
-            if nome.endswith('Buy'):
-                nome = nome[:-3]
+            try:
+                nome = fila.find_all('td')[2].text
+                if nome.endswith('Buy'):
+                    nome = nome[:-3]
 
-            if nome.endswith(simbolo):
-                nome = nome[:-len(simbolo)]
+                if nome.endswith(simbolo):
+                    nome = nome[:-len(simbolo)]
 
-            while nome[-1].isdigit():
-                nome = nome[:-1]
+                # podería dar problema se fose algo tipo Moeda1 o nome pero bueno
+                if not nome.isdigit():
+                    while nome[-1].isdigit():
+                        nome = nome[:-1]
+            except Exception as e:
+                if DEBUG: print(f'Erro en nome: {e}')
+                nome = 'Erro'
+            # nome #
 
             # ligazon
-            ligazon = fila.find(class_='cmc-link').get('href')
+            try:
+                ligazon = fila.find(class_='cmc-link').get('href')
+            except Exception as e:
+                if DEBUG: print(f'Erro en ligazon: {e}')
+                ligazon = 'Erro'
+            # ligazon #
 
-            lista_moedas.append({
-                'posicion': indice+pasados,
-                'simbolo': simbolo,
-                'nome': nome,
-                'ligazon': ligazon
-                })
+            # meter só os novos valores
+            if BUXA or (simbolo not in df_moedas.values):
+                BUXA = False
+                novo = {
+                        'simbolo': simbolo,
+                        'nome': nome,
+                        'ligazon': ligazon
+                        }
+                lista_moedas.append(novo)
+                df_moedas = df_moedas.append(novo, ignore_index=True)
 
         pasados += len(taboa)
         pax+=1
-    except:
-        gardarJson('./ligazons.json', lista_moedas)
+
+    except Exception as e:
+        if DEBUG: print(f'Erro: {e}'); print(f'Escrapeadas un total de {pax} páxinas')
+        sair()
         break
 
 # ------------------------------------------------------------------------------
