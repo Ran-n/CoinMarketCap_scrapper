@@ -3,9 +3,10 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/02 13:32:22.843158
-#+ Editado:	2022/01/02 13:53:23.788412
+#+ Editado:	2022/01/15 18:40:42.097656
 # ------------------------------------------------------------------------------
 from datetime import datetime
+from Levenshtein import distance
 
 from src.coinmarketcap_scrapper.excepcions import ErroTipado
 

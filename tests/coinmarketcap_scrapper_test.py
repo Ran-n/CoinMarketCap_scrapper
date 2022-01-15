@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/02 12:34:15.530170
-#+ Editado:	2022/01/15 15:03:40.240022
+#+ Editado:	2022/01/15 20:23:27.036067
 # ------------------------------------------------------------------------------
 import unittest
 
@@ -12,7 +12,7 @@ from src.coinmarketcap_scrapper.coinmarketcap_scrapper import CoinMarketCap
 class TestCoinMarketCap_scrapper(unittest.TestCase):
 
     @staticmethod
-    def get_url(pax=1):
+    def get_url_pax(pax=1):
         return f'https://coinmarketcap.com/?page={pax}'
 
     # Getters ------------------------------------------------------------------
@@ -26,21 +26,21 @@ class TestCoinMarketCap_scrapper(unittest.TestCase):
 
         self.assertEqual(cmc.get_pax(), 1)
 
-    def test_get_url(self):
+    def test_get_url_pax(self):
         """
         Uso normal.
         """
 
         cmc = CoinMarketCap()
-        self.assertEqual(cmc.get_url(), self.get_url())
+        self.assertEqual(cmc.get_url_pax(), self.get_url_pax())
 
-    def test_get_url2(self):
+    def test_get_url_pax2(self):
         """
         Uso normal.
         """
 
         cmc = CoinMarketCap()
-        self.assertEqual(cmc.get_url(2), self.get_url(pax=2))
+        self.assertEqual(cmc.get_url_pax(2), self.get_url_pax(pax=2))
 
     # --------------------------------------------------------------------------
 
@@ -68,12 +68,25 @@ class TestCoinMarketCap_scrapper(unittest.TestCase):
 
         cmc = CoinMarketCap()
 
-        cmc.get_top('./0.json', 0)
+        #cmc.get_top('./0.json', 0)
         #cmc.get_top('./10.json', 10)
         #cmc.get_top('./124.json', 124)
         #cmc.get_top('./200.json', 200)
 
     # get_top # ----------------------------------------------------------------
+
+    # get_info  ----------------------------------------------------------------
+
+    def test_get_info(self):
+        """
+        Uso normal.
+        """
+
+        cmc = CoinMarketCap()
+
+        print(cmc.get_info('shib', 'simbolo'))
+
+    # get_info # ---------------------------------------------------------------
 
 # ------------------------------------------------------------------------------
 

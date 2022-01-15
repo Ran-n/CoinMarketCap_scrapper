@@ -3,23 +3,25 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/01 20:23:55.455964
-#+ Editado:	2022/01/15 17:37:36.230370
+#+ Editado:	2022/01/15 20:25:10.022696
 # ------------------------------------------------------------------------------
 import requests as r
-#import pandas as pd
+import pandas as pd
 from bs4 import BeautifulSoup as bs
 from math import ceil
+from Levenshtein import distance
+from time import time
 from typing import Optional, List, Union
 
-#from uteis.ficheiro import gardarJson
+from uteis.ficheiro import gardarJson, cargarJson
 
-from src.coinmarketcap_scrapper.excepcions import ErroTipado
+from src.coinmarketcap_scrapper.excepcions import ErroTipado, ErroPaxinaInaccesibel
 from src.coinmarketcap_scrapper.cmc_uteis import lazy_check_types
 # ------------------------------------------------------------------------------
 class CoinMarketCap:
     # atributos de clase
     __pax: int = 1
-    __url: str = 'https://coinmarketcap.com/?page='
+    __url: str = 'https://coinmarketcap.com'
 
     # Constructor --------------------------------------------------------------
     def __init__(self) -> None:
@@ -32,11 +34,14 @@ class CoinMarketCap:
     def get_pax(self) -> int:
         return self.__pax
 
-    def get_url(self, nova_pax: Optional[int] = 0) -> str:
+    def get_url(self) -> str:
+        return self.__url
+
+    def get_url_pax(self, nova_pax: Optional[int] = 0) -> str:
         if nova_pax:
             self.__pax = nova_pax
 
-        return self.__url+str(self.__pax)
+        return self.__url+'/?page='+str(self.__pax)
 
     # --------------------------------------------------------------------------
 
@@ -61,6 +66,7 @@ class CoinMarketCap:
             └ Cos datos pedidos.
         """
 
+        # se mete mal o tipo dos valores saca erro
         if not lazy_check_types(topx, int):
             raise ErroTipado('O tipo da variable non entra dentro do esperado (int)')
 
@@ -72,8 +78,13 @@ class CoinMarketCap:
         #while pax<=ceil(topx/100):
         while True:
             try:
-                #df = pd.read_html(r.get(self.get_url()).text)[0]
-                soup = bs(r.get(self.get_url(pax)).text, 'html.parser')
+                pax_web = r.get(self.get_url_pax())
+
+                if pax_web.status_code == 404:
+                    raise ErroPaxinaInaccesibel
+
+                #df = pd.read_html(r.get(pax_web.text)[0]
+                soup = bs(pax_web.text, 'html.parser')
                 taboa = soup.find('table').tbody.find_all('tr')
 
                 xpax = len(taboa)
@@ -164,13 +175,81 @@ class CoinMarketCap:
         #gardarJson(nome_fich, lista_top)
         return lista_top
 
-    # get_price
-    def get_price(self) -> dict:
-        # xFCRF devolve nunha soa divisa, molaría para o futuro implementar multiples
+    # xFCRF devolve soamente usd, molaría para o futuro implementar outras
+    # get_info
+    def get_info(self, buscado: str, xvalor: Optional[str] = 'nome') -> dict:
         """
-        """
-        pass
+        Devolve toda a información posible sobre a moeda inquirida.
 
+        @entradas:
+            buscado -   Requirido   -   Catex
+            └ Cadea de texto buscada.
+            xvalor  -   Opcional    -   Catex
+            └ Indica se quere que se busque como nome de moeda ou simbolo.
+
+        @saídas:
+            Dicionario  -   Sempre
+            └ Con tódolos datos posibles.
+        """
+
+        # se mete mal o tipo dos valores saca erro
+        if not lazy_check_types([buscado, xvalor], [str, str]):
+            raise ErroTipado('O tipo da variable non entra dentro do esperado (int)')
+
+        lst_ligazons = cargarJson('./src/coinmarketcap_scrapper/ligazons.json')
+        leven = 'levenshtein'
+
+        # se mete un campo raro busca por nome
+        if xvalor not in ['nome', 'simbolo']:
+            xvalor = 'nome'
+
+        # gardamos a distanza levenshtein de tódolos elementos respecto ó buscado
+        for ele in lst_ligazons:
+            ele[leven] = distance(buscado.lower(), ele[xvalor].lower())
+
+        df = pd.DataFrame(lst_ligazons)
+        obx_buscado = df[df[leven].eq(df[leven].min())].iloc[0]
+
+
+        pax_web = r.get(self.get_url()+obx_buscado.ligazon)
+
+        if pax_web.status_code == 404:
+            raise ErroPaxinaInaccesibel
+
+        soup = bs(pax_web.text, 'html.parser')
+        rango = soup.find(class_='namePill namePillPrimary').text.split(' ')[1]
+        prezo = soup.find(class_='priceValue').text
+
+        stats = soup.find_all(class_='statsValue')
+        market_cap = stats[0].text
+        fully_diluted_mc = stats[1].text
+        vol24h = stats[2].text
+        volume_market_cap = stats[3].text
+        circulating_supply = stats[4].text
+
+        supplies = soup.find_all(class_='maxSupplyValue')
+        max_supply = supplies[0].text
+        supply = supplies[1].text
+
+        supply_percentage = soup.find(class_='supplyBlockPercentage').text
+        watchlists = soup.find_all(class_='namePill')[2].text.split(' ')[1]
+
+        return {
+                'timestamp': time(),
+                'rango': rango,
+                'simbolo': obx_buscado.simbolo,
+                'nome': obx_buscado.nome,
+                'prezo': prezo,
+                'market_cap': market_cap,
+                'fully_diluted_market__cap': fully_diluted_mc,
+                'volume_24h': vol24h,
+                'circulating_supply': circulating_supply,
+                'circulating_supply_percentage': supply_percentage,
+                'max_supply': max_supply,
+                'supply': supply,
+                'volume_market_cap': volume_market_cap,
+                'watchlists': watchlists
+                }
 
 # ------------------------------------------------------------------------------
 

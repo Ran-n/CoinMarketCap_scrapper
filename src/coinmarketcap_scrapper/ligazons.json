@@ -39588,5 +39588,20 @@
   "simbolo": "YSOY",
   "nome": "ysoy chain farm",
   "ligazon": "/currencies/ysoy-chain-farm/"
+ },
+ {
+  "simbolo": "OPV",
+  "nome": "OpenLive NFT",
+  "ligazon": "/currencies/openlive-nft/"
+ },
+ {
+  "simbolo": "MRE",
+  "nome": "Knight War The Holy Trio",
+  "ligazon": "/currencies/knight-war-the-holy-trio/"
+ },
+ {
+  "simbolo": "KENNEL",
+  "nome": "The Token Kennel",
+  "ligazon": "/currencies/the-token-kennel/"
  }
 ]
