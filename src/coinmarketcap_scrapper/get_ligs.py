@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/03 21:05:26.106045
-#+ Editado:	2022/01/15 13:42:22.351935
+#+ Editado:	2022/01/15 17:41:59.154724
 # ------------------------------------------------------------------------------
 import requests as r
 from bs4 import BeautifulSoup as bs
@@ -95,6 +95,7 @@ while True:
                         'nome': nome,
                         'ligazon': ligazon
                         }
+                if DEBUG: print(f'Engadido novo elemento: {novo}')
                 lista_moedas.append(novo)
                 df_moedas = df_moedas.append(novo, ignore_index=True)
 
