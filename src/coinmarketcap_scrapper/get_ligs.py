@@ -3,13 +3,14 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/03 21:05:26.106045
-#+ Editado:	2022/01/15 17:41:59.154724
+#+ Editado:	2022/01/20 17:54:03.590449
 # ------------------------------------------------------------------------------
 import requests as r
 from bs4 import BeautifulSoup as bs
 import pandas as pd
 
 from uteis.ficheiro import gardarJson, cargarJson
+from uteis.imprimir import jprint
 # ------------------------------------------------------------------------------
 def get_url(pax: int) -> str:
     return f'https://coinmarketcap.com/?page={pax}'
@@ -95,7 +96,11 @@ while True:
                         'nome': nome,
                         'ligazon': ligazon
                         }
-                if DEBUG: print(f'Engadido novo elemento: {novo}')
+
+                if DEBUG:
+                    print(f'Engadido novo elemento da páxina {pax}')
+                    jprint(novo)
+                    print()
                 lista_moedas.append(novo)
                 df_moedas = df_moedas.append(novo, ignore_index=True)
 

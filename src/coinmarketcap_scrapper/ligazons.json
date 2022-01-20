@@ -39603,5 +39603,630 @@
   "simbolo": "KENNEL",
   "nome": "The Token Kennel",
   "ligazon": "/currencies/the-token-kennel/"
+ },
+ {
+  "simbolo": "MGOLD",
+  "nome": "Mercenary",
+  "ligazon": "/currencies/mercenary/"
+ },
+ {
+  "simbolo": "KEIKO",
+  "nome": "Keiko",
+  "ligazon": "/currencies/keiko/"
+ },
+ {
+  "simbolo": "ASTR",
+  "nome": "Astar",
+  "ligazon": "/currencies/astar/"
+ },
+ {
+  "simbolo": "IJZ",
+  "nome": "iinjaz",
+  "ligazon": "/currencies/iinjaz/"
+ },
+ {
+  "simbolo": "CNYX",
+  "nome": "CanaryX",
+  "ligazon": "/currencies/canaryx/"
+ },
+ {
+  "simbolo": "ZAMZAM",
+  "nome": "Zamzam",
+  "ligazon": "/currencies/zamzam/"
+ },
+ {
+  "simbolo": "WEVE",
+  "nome": "veDAO",
+  "ligazon": "/currencies/vedao/"
+ },
+ {
+  "simbolo": "OCTF",
+  "nome": "Octafarm",
+  "ligazon": "/currencies/octafarm/"
+ },
+ {
+  "simbolo": "GBOX",
+  "nome": "Gbox",
+  "ligazon": "/currencies/gbox/"
+ },
+ {
+  "simbolo": "PULI",
+  "nome": "Puli Inu",
+  "ligazon": "/currencies/puli-inu/"
+ },
+ {
+  "simbolo": "BABYSHIBA",
+  "nome": "Baby Shiba Coin",
+  "ligazon": "/currencies/baby-shiba-coin/"
+ },
+ {
+  "simbolo": "LIQR",
+  "nome": "Topshelf Finance",
+  "ligazon": "/currencies/topshelf-finance/"
+ },
+ {
+  "simbolo": "LEPA",
+  "nome": "Lepasa",
+  "ligazon": "/currencies/lepasa/"
+ },
+ {
+  "simbolo": "SKYROCKETING",
+  "nome": "Skyrocketing",
+  "ligazon": "/currencies/skyrocketing/"
+ },
+ {
+  "simbolo": "MEMEDOGE",
+  "nome": "Meme Doge Coin",
+  "ligazon": "/currencies/meme-doge-coin/"
+ },
+ {
+  "simbolo": "METAFARM",
+  "nome": "MetaFarm DAO",
+  "ligazon": "/currencies/metafarm-dao/"
+ },
+ {
+  "simbolo": "BIG",
+  "nome": "Bigwinner",
+  "ligazon": "/currencies/bigwinner/"
+ },
+ {
+  "simbolo": "FirstHare",
+  "nome": "FirstHare",
+  "ligazon": "/currencies/firsthare/"
+ },
+ {
+  "simbolo": "LINSPIRIT",
+  "nome": "linSpirit",
+  "ligazon": "/currencies/linspirit/"
+ },
+ {
+  "simbolo": "BDOGE",
+  "nome": "Bingo Doge",
+  "ligazon": "/currencies/bingo-doge/"
+ },
+ {
+  "simbolo": "ONEFOX",
+  "nome": "Stable FOX",
+  "ligazon": "/currencies/stable-fox/"
+ },
+ {
+  "simbolo": "ADMC",
+  "nome": "Adamant",
+  "ligazon": "/currencies/adamant/"
+ },
+ {
+  "simbolo": "CUFFIES",
+  "nome": "Cuffies",
+  "ligazon": "/currencies/cuffies/"
+ },
+ {
+  "simbolo": "VDORA",
+  "nome": "VeldoraBSC",
+  "ligazon": "/currencies/veldorabsc/"
+ },
+ {
+  "simbolo": "MNIO",
+  "nome": "Mirrored Nio",
+  "ligazon": "/currencies/mirrored-nio/"
+ },
+ {
+  "simbolo": "SENSEI",
+  "nome": "Sensei Shib",
+  "ligazon": "/currencies/sensei-shib/"
+ },
+ {
+  "simbolo": "BNBFAN",
+  "nome": "BNB Fan Token",
+  "ligazon": "/currencies/bnbfan-token/"
+ },
+ {
+  "simbolo": "ELVES",
+  "nome": "Elves Century",
+  "ligazon": "/currencies/elves-century/"
+ },
+ {
+  "simbolo": "LORDS",
+  "nome": "LORDS",
+  "ligazon": "/currencies/lords/"
+ },
+ {
+  "simbolo": "MINITIGER",
+  "nome": "Mini Tiger",
+  "ligazon": "/currencies/minitiger/"
+ },
+ {
+  "simbolo": "STG",
+  "nome": "StarGod",
+  "ligazon": "/currencies/stargod/"
+ },
+ {
+  "simbolo": "PRNT",
+  "nome": "Prime Numbers",
+  "ligazon": "/currencies/prime-numbers/"
+ },
+ {
+  "simbolo": "DFSM",
+  "nome": "DFS MAFIA",
+  "ligazon": "/currencies/dfs-mafia/"
+ },
+ {
+  "simbolo": "AQR",
+  "nome": "Aqar Chain",
+  "ligazon": "/currencies/aqar-chain/"
+ },
+ {
+  "simbolo": "RAHO",
+  "nome": "Radio Hero",
+  "ligazon": "/currencies/radio-hero/"
+ },
+ {
+  "simbolo": "ABBY",
+  "nome": "Abby Inu",
+  "ligazon": "/currencies/abby-inu/"
+ },
+ {
+  "simbolo": "GBET",
+  "nome": "GangstaBet",
+  "ligazon": "/currencies/gangstabet/"
+ },
+ {
+  "simbolo": "EVCoin",
+  "nome": "EverestCoin",
+  "ligazon": "/currencies/everestcoin/"
+ },
+ {
+  "simbolo": "WSOW",
+  "nome": "RxSeed Coin",
+  "ligazon": "/currencies/rxseed-coin/"
+ },
+ {
+  "simbolo": "NOKU",
+  "nome": "Noku",
+  "ligazon": "/currencies/noku/"
+ },
+ {
+  "simbolo": "CHMP",
+  "nome": "Crypto Champ",
+  "ligazon": "/currencies/champ-eth/"
+ },
+ {
+  "simbolo": "ESWAPV2",
+  "nome": "eSwapping v",
+  "ligazon": "/currencies/eswapping-v2/"
+ },
+ {
+  "simbolo": "FFS",
+  "nome": "Fantom Frens",
+  "ligazon": "/currencies/fantom-frens/"
+ },
+ {
+  "simbolo": "GOBLIN",
+  "nome": "Goblin",
+  "ligazon": "/currencies/goblin/"
+ },
+ {
+  "simbolo": "GMFLOKI",
+  "nome": "GM Floki",
+  "ligazon": "/currencies/gm-floki/"
+ },
+ {
+  "simbolo": "ASUNAINU",
+  "nome": "Asuna INU",
+  "ligazon": "/currencies/asuna-inu/"
+ },
+ {
+  "simbolo": "DONA",
+  "nome": "DONASWAP",
+  "ligazon": "/currencies/donaswap/"
+ },
+ {
+  "simbolo": "SUPA",
+  "nome": "SUPA Foundation",
+  "ligazon": "/currencies/supa-foundation/"
+ },
+ {
+  "simbolo": "BABYTIGER",
+  "nome": "Baby Tiger GOLD",
+  "ligazon": "/currencies/baby-tiger-gold/"
+ },
+ {
+  "simbolo": "RESTAURANTS",
+  "nome": "Devour Token",
+  "ligazon": "/currencies/devour-token/"
+ },
+ {
+  "simbolo": "NERVE",
+  "nome": "NerveFlux",
+  "ligazon": "/currencies/nerveflux/"
+ },
+ {
+  "simbolo": "CRK",
+  "nome": "Croking",
+  "ligazon": "/currencies/croking/"
+ },
+ {
+  "simbolo": "MISTEL",
+  "nome": "Mistel Finance",
+  "ligazon": "/currencies/mistel-finance/"
+ },
+ {
+  "simbolo": "DCVC",
+  "nome": "DCVC FINANCE",
+  "ligazon": "/currencies/dcvc-finance/"
+ },
+ {
+  "simbolo": "OTL",
+  "nome": "OtherLife",
+  "ligazon": "/currencies/otherlife/"
+ },
+ {
+  "simbolo": "GSHARE",
+  "nome": "GombShare",
+  "ligazon": "/currencies/gombshare/"
+ },
+ {
+  "simbolo": "CYFM",
+  "nome": "CyberFM",
+  "ligazon": "/currencies/cyberfm/"
+ },
+ {
+  "simbolo": "SHOP",
+  "nome": "Shoppi Coin",
+  "ligazon": "/currencies/shoppi-coin/"
+ },
+ {
+  "simbolo": "STREAMER",
+  "nome": "STREAMER",
+  "ligazon": "/currencies/streamer/"
+ },
+ {
+  "simbolo": "VITAL",
+  "nome": "Vitall Markets",
+  "ligazon": "/currencies/vitall-markets/"
+ },
+ {
+  "simbolo": "GAMECRYPT",
+  "nome": "GameCrypt",
+  "ligazon": "/currencies/gamecrypt/"
+ },
+ {
+  "simbolo": "JUNGLE",
+  "nome": "Jungle",
+  "ligazon": "/currencies/jungle/"
+ },
+ {
+  "simbolo": "SZO",
+  "nome": "ShuttleOne",
+  "ligazon": "/currencies/shuttleone/"
+ },
+ {
+  "simbolo": "KAC",
+  "nome": "Kaco Finance",
+  "ligazon": "/currencies/kaco-finance/"
+ },
+ {
+  "simbolo": "BATMOON",
+  "nome": "Batmoon",
+  "ligazon": "/currencies/batmoon/"
+ },
+ {
+  "simbolo": "HOLY",
+  "nome": "Holy Trinity",
+  "ligazon": "/currencies/holy-trinity/"
+ },
+ {
+  "simbolo": "THUG",
+  "nome": "Fraktionalized THUG ",
+  "ligazon": "/currencies/fraktionalized-thug-2856/"
+ },
+ {
+  "simbolo": "DAWGS",
+  "nome": "SpaceDawgs",
+  "ligazon": "/currencies/spacedawgs/"
+ },
+ {
+  "simbolo": "BSKT",
+  "nome": "BasketCoin",
+  "ligazon": "/currencies/basketcoin/"
+ },
+ {
+  "simbolo": "CHUM",
+  "nome": "Chum Coin",
+  "ligazon": "/currencies/chum-coin/"
+ },
+ {
+  "simbolo": "LNFS",
+  "nome": "Limbo Token",
+  "ligazon": "/currencies/limbo-token/"
+ },
+ {
+  "simbolo": "GOMB",
+  "nome": "Gomb",
+  "ligazon": "/currencies/gomb/"
+ },
+ {
+  "simbolo": "SGG",
+  "nome": "SolX Gaming Guild",
+  "ligazon": "/currencies/solx-gaming-guild/"
+ },
+ {
+  "simbolo": "IMO",
+  "nome": "IMO",
+  "ligazon": "/currencies/imo/"
+ },
+ {
+  "simbolo": "APPLEB",
+  "nome": "APPLEB",
+  "ligazon": "/currencies/appleb/"
+ },
+ {
+  "simbolo": "CROBLANC",
+  "nome": "Croblanc",
+  "ligazon": "/currencies/croblanc/"
+ },
+ {
+  "simbolo": "CRONO",
+  "nome": "Cronofi Finance",
+  "ligazon": "/currencies/cronofi-finance/"
+ },
+ {
+  "simbolo": "GARI",
+  "nome": "Gari Network",
+  "ligazon": "/currencies/gari/"
+ },
+ {
+  "simbolo": "NOS",
+  "nome": "Nosana",
+  "ligazon": "/currencies/nosana/"
+ },
+ {
+  "simbolo": "IKA",
+  "nome": "Linkka",
+  "ligazon": "/currencies/linkka/"
+ },
+ {
+  "simbolo": "SAMINU",
+  "nome": "Samurinu",
+  "ligazon": "/currencies/samurinu/"
+ },
+ {
+  "simbolo": "USDs",
+  "nome": "Sperax USD",
+  "ligazon": "/currencies/sperax-usd/"
+ },
+ {
+  "simbolo": "FROYO",
+  "nome": "Froyo Games",
+  "ligazon": "/currencies/froyo-games/"
+ },
+ {
+  "simbolo": "WSO",
+  "nome": "Widi Soul",
+  "ligazon": "/currencies/wso/"
+ },
+ {
+  "simbolo": "OSQTH",
+  "nome": "Opyn Squeeth",
+  "ligazon": "/currencies/opyn-squeeth/"
+ },
+ {
+  "simbolo": "ALTS",
+  "nome": "AltSwitch",
+  "ligazon": "/currencies/altswitch/"
+ },
+ {
+  "simbolo": "ADT",
+  "nome": "Dot Arcade",
+  "ligazon": "/currencies/dot-arcade/"
+ },
+ {
+  "simbolo": "GGM",
+  "nome": "Monster Galaxy",
+  "ligazon": "/currencies/monster-galaxy/"
+ },
+ {
+  "simbolo": "TF",
+  "nome": "TouchFuture",
+  "ligazon": "/currencies/touchfuture/"
+ },
+ {
+  "simbolo": "LTT",
+  "nome": "LocalTrade",
+  "ligazon": "/currencies/localtrade/"
+ },
+ {
+  "simbolo": "CGC",
+  "nome": "HeroesTD CGC",
+  "ligazon": "/currencies/heroestd-cgc/"
+ },
+ {
+  "simbolo": "COVID19",
+  "nome": "Covid Slice",
+  "ligazon": "/currencies/covid-slice/"
+ },
+ {
+  "simbolo": "BSMB",
+  "nome": "Baby Symbiote",
+  "ligazon": "/currencies/babysymbiote/"
+ },
+ {
+  "simbolo": "BITV",
+  "nome": "BitValley",
+  "ligazon": "/currencies/bitvalley/"
+ },
+ {
+  "simbolo": "MONX",
+  "nome": "Monster of God",
+  "ligazon": "/currencies/monster-of-god/"
+ },
+ {
+  "simbolo": "WINE",
+  "nome": "Wine Shares",
+  "ligazon": "/currencies/wine-shares/"
+ },
+ {
+  "simbolo": "SHIBTARO",
+  "nome": "Shib Taro",
+  "ligazon": "/currencies/shib-taro/"
+ },
+ {
+  "simbolo": "BULLETH",
+  "nome": "BULLETH",
+  "ligazon": "/currencies/bulleth/"
+ },
+ {
+  "simbolo": "MAGACITY",
+  "nome": "Make Cities Great Again",
+  "ligazon": "/currencies/make-cities-great-again/"
+ },
+ {
+  "simbolo": "AVR",
+  "nome": "AVARA",
+  "ligazon": "/currencies/avara/"
+ },
+ {
+  "simbolo": "CRL",
+  "nome": "Crypto Rocket Launch",
+  "ligazon": "/currencies/crypto-rocket-launch/"
+ },
+ {
+  "simbolo": "BERAGE",
+  "nome": "METABULLRAGE",
+  "ligazon": "/currencies/metabullrage/"
+ },
+ {
+  "simbolo": "TAF",
+  "nome": "TAF Token",
+  "ligazon": "/currencies/taf-token/"
+ },
+ {
+  "simbolo": "INUJUMP",
+  "nome": "Inu Jump and the Temple of Shiba",
+  "ligazon": "/currencies/inu-jump-and-the-temple-of-shiba/"
+ },
+ {
+  "simbolo": "GY",
+  "nome": "Gamers Yield",
+  "ligazon": "/currencies/gamers-yield/"
+ },
+ {
+  "simbolo": "XLS",
+  "nome": "ELIS",
+  "ligazon": "/currencies/elis/"
+ },
+ {
+  "simbolo": "PUFF",
+  "nome": "Puff",
+  "ligazon": "/currencies/puff/"
+ },
+ {
+  "simbolo": "LAI",
+  "nome": "LaikaDog",
+  "ligazon": "/currencies/laikadog/"
+ },
+ {
+  "simbolo": "GLOW V2",
+  "nome": "GLOW V",
+  "ligazon": "/currencies/glow-v2/"
+ },
+ {
+  "simbolo": "SCNSOL",
+  "nome": "Socean Staked Sol",
+  "ligazon": "/currencies/socean-staked-sol/"
+ },
+ {
+  "simbolo": "DLB",
+  "nome": "DiemLibre",
+  "ligazon": "/currencies/diemlibre/"
+ },
+ {
+  "simbolo": "NVL",
+  "nome": "NVL Project",
+  "ligazon": "/currencies/nvl-project/"
+ },
+ {
+  "simbolo": "NERIAN",
+  "nome": "Nerian Network",
+  "ligazon": "/currencies/nerian-network/"
+ },
+ {
+  "simbolo": "TICKET",
+  "nome": "Ticket Finance",
+  "ligazon": "/currencies/ticket-finance/"
+ },
+ {
+  "simbolo": "TICK",
+  "nome": "Microtick",
+  "ligazon": "/currencies/microtick/"
+ },
+ {
+  "simbolo": "MWG",
+  "nome": "MotionWreck Games",
+  "ligazon": "/currencies/motionwreck-games/"
+ },
+ {
+  "simbolo": "SINGLE",
+  "nome": "Single Finance",
+  "ligazon": "/currencies/single-finance/"
+ },
+ {
+  "simbolo": "VERVE",
+  "nome": "Verve",
+  "ligazon": "/currencies/verve/"
+ },
+ {
+  "simbolo": "mCUSD",
+  "nome": "Moola Celo USD",
+  "ligazon": "/currencies/moola-celo-usd/"
+ },
+ {
+  "simbolo": "SHINJI",
+  "nome": "Shinji Inu",
+  "ligazon": "/currencies/shinji-inu/"
+ },
+ {
+  "simbolo": "SAVG",
+  "nome": "Savage",
+  "ligazon": "/currencies/savage/"
+ },
+ {
+  "simbolo": "mCEUR",
+  "nome": "Moola Celo EUR",
+  "ligazon": "/currencies/moola-celo-eur/"
+ },
+ {
+  "simbolo": "IMMO",
+  "nome": "ImmortalDAO Finance",
+  "ligazon": "/currencies/immortaldao-finance/"
+ },
+ {
+  "simbolo": "REX",
+  "nome": "Rex Inu",
+  "ligazon": "/currencies/rexinu/"
+ },
+ {
+  "simbolo": "ZJLT",
+  "nome": "ZJLT Distributed Factoring Network",
+  "ligazon": "/currencies/zjlt-distributed-factoring-network/"
  }
 ]
