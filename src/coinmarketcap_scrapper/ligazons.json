@@ -40558,5 +40558,30 @@
   "simbolo": "CYN",
   "nome": "CYCAN NETWORK",
   "ligazon": "/currencies/cycan-network/"
+ },
+ {
+  "simbolo": "EAGLE",
+  "nome": "Eagle Token",
+  "ligazon": "/currencies/eagle-token/"
+ },
+ {
+  "simbolo": "ATS",
+  "nome": "Atlas DEX",
+  "ligazon": "/currencies/atlas-dex/"
+ },
+ {
+  "simbolo": "MRFOX",
+  "nome": "Mr.FOX TOKEN",
+  "ligazon": "/currencies/mr-fox-token/"
+ },
+ {
+  "simbolo": "FIDL",
+  "nome": "Trapeza Protocol",
+  "ligazon": "/currencies/trapeza-protocol/"
+ },
+ {
+  "simbolo": "BABYAETH",
+  "nome": "Baby Aetherius",
+  "ligazon": "/currencies/baby-aetherius/"
  }
 ]
