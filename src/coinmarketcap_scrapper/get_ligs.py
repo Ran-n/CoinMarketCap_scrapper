@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/03 21:05:26.106045
-#+ Editado:	2022/01/20 17:54:03.590449
+#+ Editado:	2022/01/25 10:20:22.940935
 # ------------------------------------------------------------------------------
 import requests as r
 from bs4 import BeautifulSoup as bs
@@ -20,6 +20,8 @@ def sair() -> None:
 # ------------------------------------------------------------------------------
 DEBUG = True
 BUXA = False
+
+if DEBUG: num_engadidos = 0
 
 pax = 1
 pasados = 0
@@ -98,6 +100,7 @@ while True:
                         }
 
                 if DEBUG:
+                    num_engadidos += 1
                     print(f'Engadido novo elemento da páxina {pax}')
                     jprint(novo)
                     print()
@@ -111,5 +114,8 @@ while True:
         if DEBUG: print(f'Erro: {e}'); print(f'Escrapeadas un total de {pax} páxinas')
         sair()
         break
+
+if DEBUG:
+    print(f'Engadidas un total de {num_engadidos} entradas')
 
 # ------------------------------------------------------------------------------
