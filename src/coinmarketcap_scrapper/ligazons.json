@@ -40228,5 +40228,335 @@
   "simbolo": "ZJLT",
   "nome": "ZJLT Distributed Factoring Network",
   "ligazon": "/currencies/zjlt-distributed-factoring-network/"
+ },
+ {
+  "simbolo": "LOKA",
+  "nome": "League of Kingdoms Arena",
+  "ligazon": "/currencies/league-of-kingdoms/"
+ },
+ {
+  "simbolo": "OXD",
+  "nome": "0xDAO",
+  "ligazon": "/currencies/0xdao/"
+ },
+ {
+  "simbolo": "MQST",
+  "nome": "MonsterQuest",
+  "ligazon": "/currencies/monsterquest/"
+ },
+ {
+  "simbolo": "LOOMI",
+  "nome": "Loomi",
+  "ligazon": "/currencies/loomi/"
+ },
+ {
+  "simbolo": "MBMX",
+  "nome": "Metal Backed Money",
+  "ligazon": "/currencies/metal-backed-money/"
+ },
+ {
+  "simbolo": "CST",
+  "nome": "CryptoSkates",
+  "ligazon": "/currencies/cryptoskates/"
+ },
+ {
+  "simbolo": "ESHARE",
+  "nome": "EMP Shares",
+  "ligazon": "/currencies/emp-shares/"
+ },
+ {
+  "simbolo": "MOONEY",
+  "nome": "Mooney",
+  "ligazon": "/currencies/mooney/"
+ },
+ {
+  "simbolo": "ONI",
+  "nome": "ONINO",
+  "ligazon": "/currencies/oni-token/"
+ },
+ {
+  "simbolo": "NAO",
+  "nome": "NFTDAO",
+  "ligazon": "/currencies/nftdao/"
+ },
+ {
+  "simbolo": "DAF",
+  "nome": "DaFIN",
+  "ligazon": "/currencies/dafin/"
+ },
+ {
+  "simbolo": "MONEYRAIN",
+  "nome": "Moneyrain Finance",
+  "ligazon": "/currencies/moneyrain-finance/"
+ },
+ {
+  "simbolo": "HIMO",
+  "nome": "Himo World",
+  "ligazon": "/currencies/himo-world/"
+ },
+ {
+  "simbolo": "MATA",
+  "nome": "Ninneko (Mata)",
+  "ligazon": "/currencies/ninneko-mata/"
+ },
+ {
+  "simbolo": "SAFEMONEY",
+  "nome": "SafeMoneyBSC",
+  "ligazon": "/currencies/safemoneybsc/"
+ },
+ {
+  "simbolo": "CJET",
+  "nome": "CryptoJetski",
+  "ligazon": "/currencies/cryptojetski/"
+ },
+ {
+  "simbolo": "IB",
+  "nome": "Iron Bank",
+  "ligazon": "/currencies/iron-bank/"
+ },
+ {
+  "simbolo": "PML",
+  "nome": "Pmail",
+  "ligazon": "/currencies/pmail/"
+ },
+ {
+  "simbolo": "WBOND",
+  "nome": "War Bond Token",
+  "ligazon": "/currencies/tank-wars-zone/"
+ },
+ {
+  "simbolo": "METANIA",
+  "nome": "MetaniaGames",
+  "ligazon": "/currencies/metaniagames/"
+ },
+ {
+  "simbolo": "BWJ",
+  "nome": "Baby WOJ",
+  "ligazon": "/currencies/baby-woj/"
+ },
+ {
+  "simbolo": "TBL",
+  "nome": "Tank Battle",
+  "ligazon": "/currencies/tank-battle/"
+ },
+ {
+  "simbolo": "CTRAIN",
+  "nome": "CryptoTrains",
+  "ligazon": "/currencies/cryptotrains/"
+ },
+ {
+  "simbolo": "MCR",
+  "nome": "MineCrypto",
+  "ligazon": "/currencies/minecrypto/"
+ },
+ {
+  "simbolo": "NINTI",
+  "nome": "Nintia Estate",
+  "ligazon": "/currencies/nintia-estate/"
+ },
+ {
+  "simbolo": "EVRF",
+  "nome": "EverReflect",
+  "ligazon": "/currencies/everreflect/"
+ },
+ {
+  "simbolo": "OUD",
+  "nome": "OUD",
+  "ligazon": "/currencies/oud/"
+ },
+ {
+  "simbolo": "KRED",
+  "nome": "KRED",
+  "ligazon": "/currencies/kred/"
+ },
+ {
+  "simbolo": "TOMS",
+  "nome": "TomTomCoin",
+  "ligazon": "/currencies/tomtomcoin/"
+ },
+ {
+  "simbolo": "MYNFT",
+  "nome": "LaunchMyNFT",
+  "ligazon": "/currencies/launchmynft/"
+ },
+ {
+  "simbolo": "SOB",
+  "nome": "Son of Babydoge",
+  "ligazon": "/currencies/son-of-babydoge/"
+ },
+ {
+  "simbolo": "TOKE.N",
+  "nome": "TOKE.N",
+  "ligazon": "/currencies/thetokenproject/"
+ },
+ {
+  "simbolo": "BURD",
+  "nome": "tudaBirds",
+  "ligazon": "/currencies/tudabirds/"
+ },
+ {
+  "simbolo": "3CRV",
+  "nome": "LP 3pool Curve",
+  "ligazon": "/currencies/lp-3pool-curve/"
+ },
+ {
+  "simbolo": "FEENIXV2",
+  "nome": "ProjectFeenix",
+  "ligazon": "/currencies/projectfeenix/"
+ },
+ {
+  "simbolo": "KACY",
+  "nome": "Kassandra",
+  "ligazon": "/currencies/kassandra/"
+ },
+ {
+  "simbolo": "MXY",
+  "nome": "Metaxy",
+  "ligazon": "/currencies/metaxy/"
+ },
+ {
+  "simbolo": "ETHE",
+  "nome": "ETHEKing",
+  "ligazon": "/currencies/etheking/"
+ },
+ {
+  "simbolo": "BES",
+  "nome": "battle esports coin",
+  "ligazon": "/currencies/battle-esports-coin/"
+ },
+ {
+  "simbolo": "TITANS",
+  "nome": "Tower Defense Titans",
+  "ligazon": "/currencies/tower-defense-titans/"
+ },
+ {
+  "simbolo": "INFLUENCE",
+  "nome": "Influencer Finance",
+  "ligazon": "/currencies/influencer-finance/"
+ },
+ {
+  "simbolo": "DSE",
+  "nome": "DeSpace",
+  "ligazon": "/currencies/despace/"
+ },
+ {
+  "simbolo": "VIVAION",
+  "nome": "Vivaion",
+  "ligazon": "/currencies/vivaion/"
+ },
+ {
+  "simbolo": "BSH",
+  "nome": "BNB Superheroes",
+  "ligazon": "/currencies/bnb-superheroes/"
+ },
+ {
+  "simbolo": "RCCC",
+  "nome": "RCCCToken",
+  "ligazon": "/currencies/rccctoken/"
+ },
+ {
+  "simbolo": "GENI",
+  "nome": "GemUni",
+  "ligazon": "/currencies/gemuni/"
+ },
+ {
+  "simbolo": "BRK",
+  "nome": "BlueArk",
+  "ligazon": "/currencies/blueark/"
+ },
+ {
+  "simbolo": "TKNFY",
+  "nome": "Tokenfy",
+  "ligazon": "/currencies/tokenfy/"
+ },
+ {
+  "simbolo": "RPC",
+  "nome": "Ripio Coin",
+  "ligazon": "/currencies/ripio-coin/"
+ },
+ {
+  "simbolo": "LOZ",
+  "nome": "League of Zodiacs",
+  "ligazon": "/currencies/league-of-zodiacs/"
+ },
+ {
+  "simbolo": "RYB",
+  "nome": "Ruyi",
+  "ligazon": "/currencies/ruyi/"
+ },
+ {
+  "simbolo": "KATSUMI",
+  "nome": "Katsumi",
+  "ligazon": "/currencies/katsumi/"
+ },
+ {
+  "simbolo": "ADAO",
+  "nome": "Ameru DAO",
+  "ligazon": "/currencies/ameru-network/"
+ },
+ {
+  "simbolo": "PHIT",
+  "nome": "PHIT",
+  "ligazon": "/currencies/phit/"
+ },
+ {
+  "simbolo": "TPF",
+  "nome": "Top Flower",
+  "ligazon": "/currencies/top-flower/"
+ },
+ {
+  "simbolo": "WAMPL",
+  "nome": "Wrapped Ampleforth",
+  "ligazon": "/currencies/wrapped-ampleforth/"
+ },
+ {
+  "simbolo": "$TKT",
+  "nome": "ToonKing Token",
+  "ligazon": "/currencies/toonking-token/"
+ },
+ {
+  "simbolo": "NOTART",
+  "nome": "Its Not Art",
+  "ligazon": "/currencies/its-not-art/"
+ },
+ {
+  "simbolo": "$ROSS",
+  "nome": "Ross Inu",
+  "ligazon": "/currencies/ross-inu/"
+ },
+ {
+  "simbolo": "MDC",
+  "nome": "Mindcell",
+  "ligazon": "/currencies/mindcell/"
+ },
+ {
+  "simbolo": "PERSIA",
+  "nome": "Persia",
+  "ligazon": "/currencies/persia/"
+ },
+ {
+  "simbolo": "PWG",
+  "nome": "PW-GOLD",
+  "ligazon": "/currencies/pw-gold/"
+ },
+ {
+  "simbolo": "PROTO",
+  "nome": "Protofi",
+  "ligazon": "/currencies/protofi/"
+ },
+ {
+  "simbolo": "PAW",
+  "nome": "Paw V",
+  "ligazon": "/currencies/paw-v2/"
+ },
+ {
+  "simbolo": "$COIN",
+  "nome": "COIN",
+  "ligazon": "/currencies/coin-defi/"
+ },
+ {
+  "simbolo": "CYN",
+  "nome": "CYCAN NETWORK",
+  "ligazon": "/currencies/cycan-network/"
  }
 ]
