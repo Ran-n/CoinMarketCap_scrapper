@@ -40583,5 +40583,165 @@
   "simbolo": "BABYAETH",
   "nome": "Baby Aetherius",
   "ligazon": "/currencies/baby-aetherius/"
+ },
+ {
+  "simbolo": "FCON",
+  "nome": "SpaceFalcon",
+  "ligazon": "/currencies/spacefalcon/"
+ },
+ {
+  "simbolo": "AKITAX",
+  "nome": "Akitavax",
+  "ligazon": "/currencies/akitavax/"
+ },
+ {
+  "simbolo": "GENART",
+  "nome": "GENART",
+  "ligazon": "/currencies/genart/"
+ },
+ {
+  "simbolo": "CMFI",
+  "nome": "Compendium Finance",
+  "ligazon": "/currencies/compendium-finance/"
+ },
+ {
+  "simbolo": "YFIH2",
+  "nome": "H2Finance",
+  "ligazon": "/currencies/h2finance/"
+ },
+ {
+  "simbolo": "DDAO",
+  "nome": "DeFi Hunters DAO",
+  "ligazon": "/currencies/defi-hunters-dao/"
+ },
+ {
+  "simbolo": "CSHARE",
+  "nome": "Comfy Share",
+  "ligazon": "/currencies/comfy-share/"
+ },
+ {
+  "simbolo": "NHT",
+  "nome": "Neighbourhoods",
+  "ligazon": "/currencies/neighbourhoods/"
+ },
+ {
+  "simbolo": "PHOTON",
+  "nome": "PhotonSwap",
+  "ligazon": "/currencies/photonswap/"
+ },
+ {
+  "simbolo": "3OMB",
+  "nome": "3OMB Token",
+  "ligazon": "/currencies/30mb-token/"
+ },
+ {
+  "simbolo": "MCDOGE",
+  "nome": "McDoge",
+  "ligazon": "/currencies/mcdoge/"
+ },
+ {
+  "simbolo": "3SHARE",
+  "nome": "3Share",
+  "ligazon": "/currencies/3shares/"
+ },
+ {
+  "simbolo": "SYNR",
+  "nome": "SYN CITY",
+  "ligazon": "/currencies/syn-city/"
+ },
+ {
+  "simbolo": "OUR",
+  "nome": "Ouranos",
+  "ligazon": "/currencies/ouranos/"
+ },
+ {
+  "simbolo": "HVT",
+  "nome": "HyperVerse",
+  "ligazon": "/currencies/hyperverse/"
+ },
+ {
+  "simbolo": "DHOLD",
+  "nome": "DeFi Holdings",
+  "ligazon": "/currencies/defi-holdings/"
+ },
+ {
+  "simbolo": "ANIA",
+  "nome": "Arkania Protocol",
+  "ligazon": "/currencies/arkania-protocol/"
+ },
+ {
+  "simbolo": "CHEDDA",
+  "nome": "Chedda Token",
+  "ligazon": "/currencies/chedda-token/"
+ },
+ {
+  "simbolo": "TLNT",
+  "nome": "TalentCoin",
+  "ligazon": "/currencies/talentcoin/"
+ },
+ {
+  "simbolo": "HEADZ",
+  "nome": "Cryptoheadz",
+  "ligazon": "/currencies/cryptoheadz/"
+ },
+ {
+  "simbolo": "SCRAP",
+  "nome": "Scrap",
+  "ligazon": "/currencies/scrap/"
+ },
+ {
+  "simbolo": "KILLSQUID",
+  "nome": "Revenge on the Squid Gamers",
+  "ligazon": "/currencies/revenge-on-the-squid-gamers/"
+ },
+ {
+  "simbolo": "NRK",
+  "nome": "NoahArk",
+  "ligazon": "/currencies/noahark/"
+ },
+ {
+  "simbolo": "HMETA",
+  "nome": "Hampton Metaverse",
+  "ligazon": "/currencies/hampton-metaverse/"
+ },
+ {
+  "simbolo": "HUMAN",
+  "nome": "HUMAN",
+  "ligazon": "/currencies/human-coin/"
+ },
+ {
+  "simbolo": "FMETA",
+  "nome": "FMETA",
+  "ligazon": "/currencies/facebook-metaverse/"
+ },
+ {
+  "simbolo": "EGX",
+  "nome": "Enegra (EGX)",
+  "ligazon": "/currencies/enegra-egx/"
+ },
+ {
+  "simbolo": "WEFIN",
+  "nome": "eFin Decentralized",
+  "ligazon": "/currencies/efin-decentralized/"
+ },
+ {
+  "simbolo": "BCC",
+  "nome": "BlueChip Capital Token",
+  "ligazon": "/currencies/bluechip-capital-token/"
+ },
+ {
+  "simbolo": "LIBERTAS",
+  "nome": "Libertas Token",
+  "ligazon": "/currencies/libertas-token/"
+ },
+ {
+  "simbolo": "STORE",
+  "nome": "Bit.Store",
+  "ligazon": "/currencies/bit-store/"
+ },
+ {
+  "simbolo": "WORDL",
+  "nome": "Wordl DeFi",
+  "ligazon": "/currencies/wordl-defi/"
  }
 ]
