@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/03 21:05:26.106045
-#+ Editado:	2022/01/26 18:16:00.658008
+#+ Editado:	2022/01/26 18:49:58.224467
 # ------------------------------------------------------------------------------
 import requests as r
 from bs4 import BeautifulSoup as bs
@@ -23,8 +23,8 @@ DEBUG = True
 BUXA = False
 
 if DEBUG:
-    print()
     print(datetime.now())
+    print()
     num_engadidos = 0
 
 pax = 1

@@ -40758,5 +40758,10 @@
   "simbolo": "KRIDA",
   "nome": "KridaFans",
   "ligazon": "/currencies/kridafans/"
+ },
+ {
+  "simbolo": "SHIBEV",
+  "nome": "ShibaElonVerse",
+  "ligazon": "/currencies/shibaelonverse/"
  }
 ]
