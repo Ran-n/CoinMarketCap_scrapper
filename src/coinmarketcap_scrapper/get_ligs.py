@@ -3,11 +3,12 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/03 21:05:26.106045
-#+ Editado:	2022/01/25 10:20:22.940935
+#+ Editado:	2022/01/26 18:16:00.658008
 # ------------------------------------------------------------------------------
 import requests as r
 from bs4 import BeautifulSoup as bs
 import pandas as pd
+from datetime import datetime
 
 from uteis.ficheiro import gardarJson, cargarJson
 from uteis.imprimir import jprint
@@ -21,7 +22,10 @@ def sair() -> None:
 DEBUG = True
 BUXA = False
 
-if DEBUG: num_engadidos = 0
+if DEBUG:
+    print()
+    print(datetime.now())
+    num_engadidos = 0
 
 pax = 1
 pasados = 0
@@ -117,5 +121,7 @@ while True:
 
 if DEBUG:
     print(f'Engadidas un total de {num_engadidos} entradas')
+    print()
+    print(datetime.now())
 
 # ------------------------------------------------------------------------------

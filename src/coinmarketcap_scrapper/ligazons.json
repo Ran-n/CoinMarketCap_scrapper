@@ -40743,5 +40743,20 @@
   "simbolo": "WORDL",
   "nome": "Wordl DeFi",
   "ligazon": "/currencies/wordl-defi/"
+ },
+ {
+  "simbolo": "MVG",
+  "nome": "Mad Viking Games",
+  "ligazon": "/currencies/mad-viking-games/"
+ },
+ {
+  "simbolo": "PIF",
+  "nome": "Play It Forward DAO",
+  "ligazon": "/currencies/play-it-forward-dao/"
+ },
+ {
+  "simbolo": "KRIDA",
+  "nome": "KridaFans",
+  "ligazon": "/currencies/kridafans/"
  }
 ]
