@@ -6,7 +6,6 @@ src/coinmarketcap_scrapper/__init__.py
 src/coinmarketcap_scrapper/cmc_uteis.py
 src/coinmarketcap_scrapper/coinmarketcap_scrapper.py
 src/coinmarketcap_scrapper/excepcions.py
-src/coinmarketcap_scrapper/get_ligs.py
 src/coinmarketcap_scrapper.egg-info/PKG-INFO
 src/coinmarketcap_scrapper.egg-info/SOURCES.txt
 src/coinmarketcap_scrapper.egg-info/dependency_links.txt
