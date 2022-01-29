@@ -3,24 +3,24 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/03 21:05:26.106045
-#+ Editado:	2022/01/29 14:15:49.246406
+#+ Editado:	2022/01/26 18:49:58.224467
 # ------------------------------------------------------------------------------
 import requests as r
 from bs4 import BeautifulSoup as bs
 import pandas as pd
 from datetime import datetime
-import sqlite3
-from secrets import token_urlsafe as tus
 
+from uteis.ficheiro import gardarJson, cargarJson
 from uteis.imprimir import jprint
 # ------------------------------------------------------------------------------
 def get_url(pax: int) -> str:
     return f'https://coinmarketcap.com/?page={pax}'
+
+def sair() -> None:
+    gardarJson('./ligazons.json', lista_moedas)
 # ------------------------------------------------------------------------------
 DEBUG = True
-
-con = sqlite3.connect('ligazons.db')
-cur = con.cursor()
+BUXA = False
 
 if DEBUG:
     print(datetime.now())
@@ -29,6 +29,17 @@ if DEBUG:
 
 pax = 1
 pasados = 0
+lista_moedas = cargarJson('./ligazons.json')
+# se non existe o ficheiro inicializase como diccionario
+if lista_moedas == {}:
+    BUXA = True
+    lista_moedas = []
+
+"""
+Decidiuse pasar desta implementación por ser 1µs máis lento.
+[True for ele in lista_moedas if simbolo in ele.values()][0]
+"""
+df_moedas = pd.DataFrame.from_dict(lista_moedas)
 
 while True:
     if DEBUG: print(f'Escrapeando a páxina {pax}', end='\r')
@@ -39,6 +50,7 @@ while True:
         if paxina_web.status_code == 404:
             if DEBUG: print('Máximo de paxs alcanzado.')
             if DEBUG: print(f'Escrapeadas un total de {pax-1} páxinas')
+            sair()
             break
 
         soup = bs(paxina_web.text, 'html.parser')
@@ -82,31 +94,30 @@ while True:
                 ligazon = 'Erro'
             # ligazon #
 
-            try:
-                cur.execute('insert into moeda("simbolo", "nome", "ligazon")'\
-                    f' values("{simbolo}", "{nome}", "{ligazon}")')
-            except Exception as e:
-                pass
-            else:
-                if DEBUG:
-                    num_engadidos += 1
-                    print(f'Engadido novo elemento da páxina {pax}')
-                    jprint({
+            # meter só os novos valores
+            if BUXA or (simbolo not in df_moedas.values):
+                BUXA = False
+                novo = {
                         'simbolo': simbolo,
                         'nome': nome,
                         'ligazon': ligazon
-                        })
-                    print()
+                        }
 
-        con.commit()
+                if DEBUG:
+                    num_engadidos += 1
+                    print(f'Engadido novo elemento da páxina {pax}')
+                    jprint(novo)
+                    print()
+                lista_moedas.append(novo)
+                df_moedas = df_moedas.append(novo, ignore_index=True)
+
         pasados += len(taboa)
         pax+=1
 
     except Exception as e:
         if DEBUG: print(f'Erro: {e}'); print(f'Escrapeadas un total de {pax} páxinas')
+        sair()
         break
-
-con.close()
 
 if DEBUG:
     print(f'Engadidas un total de {num_engadidos} entradas')

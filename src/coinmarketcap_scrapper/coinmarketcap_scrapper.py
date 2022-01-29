@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/01 20:23:55.455964
-#+ Editado:	2022/01/15 20:28:47.203737
+#+ Editado:	2022/01/29 14:38:22.400930
 # ------------------------------------------------------------------------------
 import requests as r
 import pandas as pd
@@ -11,6 +11,7 @@ from bs4 import BeautifulSoup as bs
 from math import ceil
 from Levenshtein import distance
 from time import time
+import sqlite3
 from typing import Optional, List, Union
 
 from uteis.ficheiro import gardarJson, cargarJson
