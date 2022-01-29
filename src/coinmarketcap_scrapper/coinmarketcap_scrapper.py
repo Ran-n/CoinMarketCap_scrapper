@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/01 20:23:55.455964
-#+ Editado:	2022/01/29 14:38:22.400930
+#+ Editado:	2022/01/29 17:43:14.631370
 # ------------------------------------------------------------------------------
 import requests as r
 import pandas as pd
@@ -12,9 +12,8 @@ from math import ceil
 from Levenshtein import distance
 from time import time
 import sqlite3
+import sys
 from typing import Optional, List, Union
-
-from uteis.ficheiro import gardarJson, cargarJson
 
 from src.coinmarketcap_scrapper.excepcions import ErroTipado, ErroPaxinaInaccesibel
 from src.coinmarketcap_scrapper.cmc_uteis import lazy_check_types
@@ -37,6 +36,9 @@ class CoinMarketCap:
 
     def get_url(self) -> str:
         return self.__url
+
+    def get_con(self) -> None:
+        return sqlite3.connect('./src/coinmarketcap_scrapper/ligazons.db')
 
     def get_url_pax(self, nova_pax: Optional[int] = 0) -> str:
         if nova_pax:
@@ -196,22 +198,32 @@ class CoinMarketCap:
         if not lazy_check_types([buscado, xvalor], [str, str]):
             raise ErroTipado('O tipo da variable non entra dentro do esperado (int)')
 
-        lst_ligazons = cargarJson('./src/coinmarketcap_scrapper/ligazons.json')
-        leven = 'levenshtein'
-
         # se mete un campo raro busca por nome
         if xvalor not in ['nome', 'simbolo']:
             xvalor = 'nome'
 
-        # gardamos a distanza levenshtein de tódolos elementos respecto ó buscado
-        for ele in lst_ligazons:
-            ele[leven] = distance(buscado.lower(), ele[xvalor].lower())
+        con = self.get_con()
+        cur = con.cursor()
 
-        df = pd.DataFrame(lst_ligazons)
-        obx_buscado = df[df[leven].eq(df[leven].min())].iloc[0]
+        buscado_sentenza = '%'.join(list(buscado))
+        sentenza = f'select id, {xvalor} from moeda where {xvalor} like "%{buscado_sentenza}%"'
+        busqueda = cur.execute(sentenza).fetchall()
 
+        # non atopou ningún
+        if len(busqueda) == 0:
+            return {}
 
-        pax_web = r.get(self.get_url()+obx_buscado.ligazon)
+        id_buscado = 0
+        min_distancia = sys.maxsize
+        for moeda in busqueda:
+            distancia = distance(buscado, moeda[1])
+            if distancia<min_distancia:
+                min_distancia = distancia
+                id_buscado = moeda[0]
+
+        obx_buscado = cur.execute(f'select simbolo, nome, ligazon from moeda where id={id_buscado}').fetchone()
+
+        pax_web = r.get(self.get_url()+obx_buscado[2])
 
         if pax_web.status_code == 404:
             raise ErroPaxinaInaccesibel
@@ -228,17 +240,25 @@ class CoinMarketCap:
         circulating_supply = stats[4].text
 
         supplies = soup.find_all(class_='maxSupplyValue')
-        max_supply = supplies[0].text
-        supply = supplies[1].text
+        try:
+            max_supply = supplies[0].text
+        except:
+            max_supply = '-'
+        try:
+            supply = supplies[1].text
+        except:
+            supply = '-'
 
         supply_percentage = soup.find(class_='supplyBlockPercentage').text
         watchlists = soup.find_all(class_='namePill')[2].text.split(' ')[1]
 
+        con.close()
+
         return {
                 'timestamp': time(),
                 'rango': rango,
-                'simbolo': obx_buscado.simbolo,
-                'nome': obx_buscado.nome,
+                'simbolo': obx_buscado[0],
+                'nome': obx_buscado[1],
                 'prezo': prezo,
                 'market_cap': market_cap,
                 'fully_diluted_market__cap': fully_diluted_mc,
