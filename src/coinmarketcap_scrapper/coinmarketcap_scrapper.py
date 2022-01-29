@@ -3,10 +3,9 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/01 20:23:55.455964
-#+ Editado:	2022/01/29 17:51:50.619510
+#+ Editado:	2022/01/29 19:37:10.391837
 # ------------------------------------------------------------------------------
 import requests as r
-import pandas as pd
 from bs4 import BeautifulSoup as bs
 from math import ceil
 from Levenshtein import distance
@@ -86,7 +85,6 @@ class CoinMarketCap:
                 if pax_web.status_code == 404:
                     raise ErroPaxinaInaccesibel
 
-                #df = pd.read_html(r.get(pax_web.text)[0]
                 soup = bs(pax_web.text, 'html.parser')
                 taboa = soup.find('table').tbody.find_all('tr')
 
