@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/01 20:23:55.455964
-#+ Editado:	2022/01/29 17:43:14.631370
+#+ Editado:	2022/01/29 17:51:50.619510
 # ------------------------------------------------------------------------------
 import requests as r
 import pandas as pd
@@ -38,7 +38,7 @@ class CoinMarketCap:
         return self.__url
 
     def get_con(self) -> None:
-        return sqlite3.connect('./src/coinmarketcap_scrapper/ligazons.db')
+        return sqlite3.connect('./media/DB/ligazons.db')
 
     def get_url_pax(self, nova_pax: Optional[int] = 0) -> str:
         if nova_pax:
