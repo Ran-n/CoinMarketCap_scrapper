@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/01 20:23:55.455964
-#+ Editado:	2022/01/29 19:37:10.391837
+#+ Editado:	2022/01/30 12:49:24.124865
 # ------------------------------------------------------------------------------
 import requests as r
 from bs4 import BeautifulSoup as bs
@@ -53,6 +53,8 @@ class CoinMarketCap:
         self.__pax = nova_pax
 
     # --------------------------------------------------------------------------
+
+    # get_global_info(self):
 
     # get_top
     def get_top(self, topx: Optional[int] = 10) -> List[dict]:
@@ -176,8 +178,8 @@ class CoinMarketCap:
         return lista_top
 
     # xFCRF devolve soamente usd, molaría para o futuro implementar outras
-    # get_info
-    def get_info(self, buscado: str, xvalor: Optional[str] = 'nome') -> dict:
+    # get_coin
+    def get_coin(self, buscado: str, xvalor: Optional[str] = 'nome') -> dict:
         """
         Devolve toda a información posible sobre a moeda inquirida.
 

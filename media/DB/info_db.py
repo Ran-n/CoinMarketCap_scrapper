@@ -2,18 +2,24 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
-#+ Creado: 	2022/01/29 13:23:47.607933
-#+ Editado:	2022/01/30 12:44:17.596105
+#+ Creado: 	2022/01/30 12:41:03.026263
+#+ Editado:	2022/01/30 12:44:11.411244
 # ------------------------------------------------------------------------------
 import sqlite3
 
-from uteis.ficheiro import cargarFich
+from uteis.imprimir import jprint
 # ------------------------------------------------------------------------------
 con = sqlite3.connect('ligazons.db')
 cur = con.cursor()
 
-cur.executescript(''.join(cargarFich('script_ligazons.sql')))
+cantidade = cur.execute('select count(*) from moeda').fetchone()[0]
 
 con.commit()
 con.close()
+
+info = {
+        'cantidade': cantidade
+        }
+
+jprint(info)
 # ------------------------------------------------------------------------------
