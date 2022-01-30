@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/03 21:05:26.106045
-#+ Editado:	2022/01/29 14:15:49.246406
+#+ Editado:	2022/01/30 13:35:10.758265
 # ------------------------------------------------------------------------------
 import requests as r
 from bs4 import BeautifulSoup as bs
@@ -13,9 +13,17 @@ import sqlite3
 from secrets import token_urlsafe as tus
 
 from uteis.imprimir import jprint
+
+import info_db
 # ------------------------------------------------------------------------------
 def get_url(pax: int) -> str:
     return f'https://coinmarketcap.com/?page={pax}'
+
+def print_info_db() -> None:
+    print()
+    print('Info da DB:')
+    jprint(info_db.main())
+    print()
 # ------------------------------------------------------------------------------
 DEBUG = True
 
@@ -24,8 +32,8 @@ cur = con.cursor()
 
 if DEBUG:
     print(datetime.now())
-    print()
     num_engadidos = 0
+    print_info_db()
 
 pax = 1
 pasados = 0
@@ -110,7 +118,7 @@ con.close()
 
 if DEBUG:
     print(f'Engadidas un total de {num_engadidos} entradas')
-    print()
+    print_info_db()
     print(datetime.now())
 
 # ------------------------------------------------------------------------------
