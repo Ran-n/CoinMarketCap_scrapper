@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/01 20:23:55.455964
-#+ Editado:	2022/01/30 12:49:24.124865
+#+ Editado:	2022/01/30 13:25:59.541461
 # ------------------------------------------------------------------------------
 import requests as r
 from bs4 import BeautifulSoup as bs
@@ -54,7 +54,43 @@ class CoinMarketCap:
 
     # --------------------------------------------------------------------------
 
-    # get_global_info(self):
+    # get_info
+    def get_info(self) -> dict:
+        """
+        Devolve a info xeral sobre o mercado.
+
+        @entradas:
+            Ningunha.
+
+        @saídas:
+            Dicionario  -   Sempre
+            └ Cos datos que proporciona a páxina.
+        """
+
+        dic_info = {}
+        dic_domin = {}
+
+        pax_web = r.get(self.get_url())
+
+        if pax_web.status_code == 404:
+            raise ErroPaxinaInaccesibel
+
+        soup = bs(pax_web.text, 'html.parser')
+
+        # devolve os resultados dúas veces, non sei por que
+        info = soup.find_all(class_='sc-2bz68i-0')
+
+        for ele in info[:int(len(info)/2)]:
+            parte = ele.text.split(u': \xa0')
+            dic_info[parte[0]] = parte[1]
+
+
+        for ele in [ele.split(':') for ele in dic_info['Dominance'].split(u'\xa0')]:
+            dic_domin[ele[0]] = ele[1]
+
+        dic_info['Dominance'] = dic_domin
+
+        return dic_info
 
     # get_top
     def get_top(self, topx: Optional[int] = 10) -> List[dict]:
