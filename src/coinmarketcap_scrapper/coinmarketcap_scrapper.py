@@ -37,7 +37,7 @@ class CoinMarketCap:
         return self.__url
 
     def get_con(self) -> None:
-        return sqlite3.connect('./media/DB/ligazons.db')
+        return sqlite3.connect('./media/db/ligazons.db')
 
     def get_url_pax(self, nova_pax: Optional[int] = 0) -> str:
         if nova_pax:
