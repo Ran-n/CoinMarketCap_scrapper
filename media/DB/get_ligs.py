@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/03 21:05:26.106045
-#+ Editado:	2022/01/30 13:35:10.758265
+#+ Editado:	2022/02/01 14:24:02.104365
 # ------------------------------------------------------------------------------
 import requests as r
 from bs4 import BeautifulSoup as bs
@@ -21,8 +21,8 @@ def get_url(pax: int) -> str:
 
 def print_info_db() -> None:
     print()
-    print('Info da DB:')
-    jprint(info_db.main())
+    info = info_db.main()
+    print(f'{info["cantidade"]} entradas totais na DB.')
     print()
 # ------------------------------------------------------------------------------
 DEBUG = True
@@ -45,8 +45,8 @@ while True:
         paxina_web = r.get(get_url(pax))
 
         if paxina_web.status_code == 404:
-            if DEBUG: print('Máximo de paxs alcanzado.')
-            if DEBUG: print(f'Escrapeadas un total de {pax-1} páxinas')
+            if DEBUG: print('Máximo de páxinas alcanzado.')
+            if DEBUG: print(f'Escrapeadas un total de {pax-1} páxinas.')
             break
 
         soup = bs(paxina_web.text, 'html.parser')
@@ -91,8 +91,8 @@ while True:
             # ligazon #
 
             try:
-                cur.execute('insert into moeda("simbolo", "nome", "ligazon")'\
-                    f' values("{simbolo}", "{nome}", "{ligazon}")')
+                cur.execute('insert into moeda("simbolo", "nome", "ligazon", "data")'\
+                    f' values("{simbolo}", "{nome}", "{ligazon}", "{datetime.now()}")')
             except Exception as e:
                 pass
             else:
@@ -117,7 +117,7 @@ while True:
 con.close()
 
 if DEBUG:
-    print(f'Engadidas un total de {num_engadidos} entradas')
+    print(f'Engadidas un total de {num_engadidos} entradas.')
     print_info_db()
     print(datetime.now())
 
