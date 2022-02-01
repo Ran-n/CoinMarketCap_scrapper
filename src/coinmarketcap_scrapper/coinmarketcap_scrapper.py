@@ -14,8 +14,8 @@ import sqlite3
 import sys
 from typing import Optional, List, Union
 
-from src.coinmarketcap_scrapper.excepcions import ErroTipado, ErroPaxinaInaccesibel
-from src.coinmarketcap_scrapper.cmc_uteis import lazy_check_types
+from .excepcions import ErroTipado, ErroPaxinaInaccesibel
+from .cmc_uteis import lazy_check_types
 # ------------------------------------------------------------------------------
 class CoinMarketCap:
     # atributos de clase
