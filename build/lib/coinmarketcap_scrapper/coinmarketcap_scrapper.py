@@ -3,10 +3,9 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/01 20:23:55.455964
-#+ Editado:	2022/01/29 17:51:50.619510
+#+ Editado:	2022/01/30 13:25:59.541461
 # ------------------------------------------------------------------------------
 import requests as r
-import pandas as pd
 from bs4 import BeautifulSoup as bs
 from math import ceil
 from Levenshtein import distance
@@ -15,8 +14,8 @@ import sqlite3
 import sys
 from typing import Optional, List, Union
 
-from src.coinmarketcap_scrapper.excepcions import ErroTipado, ErroPaxinaInaccesibel
-from src.coinmarketcap_scrapper.cmc_uteis import lazy_check_types
+from .excepcions import ErroTipado, ErroPaxinaInaccesibel
+from .cmc_uteis import lazy_check_types
 # ------------------------------------------------------------------------------
 class CoinMarketCap:
     # atributos de clase
@@ -38,7 +37,7 @@ class CoinMarketCap:
         return self.__url
 
     def get_con(self) -> None:
-        return sqlite3.connect('./media/DB/ligazons.db')
+        return sqlite3.connect('./media/db/ligazons.db')
 
     def get_url_pax(self, nova_pax: Optional[int] = 0) -> str:
         if nova_pax:
@@ -54,6 +53,44 @@ class CoinMarketCap:
         self.__pax = nova_pax
 
     # --------------------------------------------------------------------------
+
+    # get_info
+    def get_info(self) -> dict:
+        """
+        Devolve a info xeral sobre o mercado.
+
+        @entradas:
+            Ningunha.
+
+        @saídas:
+            Dicionario  -   Sempre
+            └ Cos datos que proporciona a páxina.
+        """
+
+        dic_info = {}
+        dic_domin = {}
+
+        pax_web = r.get(self.get_url())
+
+        if pax_web.status_code == 404:
+            raise ErroPaxinaInaccesibel
+
+        soup = bs(pax_web.text, 'html.parser')
+
+        # devolve os resultados dúas veces, non sei por que
+        info = soup.find_all(class_='sc-2bz68i-0')
+
+        for ele in info[:int(len(info)/2)]:
+            parte = ele.text.split(u': \xa0')
+            dic_info[parte[0]] = parte[1]
+
+
+        for ele in [ele.split(':') for ele in dic_info['Dominance'].split(u'\xa0')]:
+            dic_domin[ele[0]] = ele[1]
+
+        dic_info['Dominance'] = dic_domin
+
+        return dic_info
 
     # get_top
     def get_top(self, topx: Optional[int] = 10) -> List[dict]:
@@ -86,7 +123,6 @@ class CoinMarketCap:
                 if pax_web.status_code == 404:
                     raise ErroPaxinaInaccesibel
 
-                #df = pd.read_html(r.get(pax_web.text)[0]
                 soup = bs(pax_web.text, 'html.parser')
                 taboa = soup.find('table').tbody.find_all('tr')
 
@@ -178,8 +214,8 @@ class CoinMarketCap:
         return lista_top
 
     # xFCRF devolve soamente usd, molaría para o futuro implementar outras
-    # get_info
-    def get_info(self, buscado: str, xvalor: Optional[str] = 'nome') -> dict:
+    # get_coin
+    def get_coin(self, buscado: str, xvalor: Optional[str] = 'nome') -> dict:
         """
         Devolve toda a información posible sobre a moeda inquirida.
 

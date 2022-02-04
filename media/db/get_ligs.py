@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/03 21:05:26.106045
-#+ Editado:	2022/02/01 18:56:23.747659
+#+ Editado:	2022/02/02 14:06:28.217837
 # ------------------------------------------------------------------------------
 import requests as r
 from bs4 import BeautifulSoup as bs
@@ -19,11 +19,14 @@ import info_db
 def get_url(pax: int) -> str:
     return f'https://coinmarketcap.com/?page={pax}'
 
-def print_info_db() -> None:
+def print_info_db() -> dict:
     print()
     info = info_db.main()
     print(f'{info["cantidade"]} entradas totais na DB.')
     print()
+
+    return info
+
 # ------------------------------------------------------------------------------
 DEBUG = True
 
@@ -33,7 +36,7 @@ cur = con.cursor()
 if DEBUG:
     print(datetime.now())
     num_engadidos = 0
-    print_info_db()
+    info_db_ini = print_info_db()
 
 pax = 1
 pasados = 0
@@ -102,6 +105,7 @@ while True:
                     num_engadidos += 1
                     print(f'Engadido novo elemento da páxina {pax}')
                     jprint({
+                        'id': info_db_ini['cantidade']+num_engadidos,
                         'simbolo': simbolo,
                         'nome': nome,
                         'ligazon': ligazon

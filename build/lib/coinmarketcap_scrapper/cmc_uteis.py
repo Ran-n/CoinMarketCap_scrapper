@@ -5,7 +5,7 @@
 #+ Creado: 	2022/01/02 13:32:22.843158
 #+ Editado:	2022/01/15 23:10:45.395878
 # ------------------------------------------------------------------------------
-from src.coinmarketcap_scrapper.excepcions import ErroTipado
+from .excepcions import ErroTipado
 # ------------------------------------------------------------------------------
 def lazy_check_types(varis, tipos) -> bool:
     """
