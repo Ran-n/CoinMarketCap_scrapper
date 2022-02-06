@@ -2,7 +2,7 @@
 
 Python wrapper for the [CoinMarketCap](https://coinmarketcap.com/) website with GPLv3 license.
 
-## Donations 🙇🙇‍♀
+## [Donations 🙇🙇‍♀](https://github.com/Ran-n/doc/blob/main/doaz%C3%B3ns.md)
 
 **Bitcoin** <img src="https://raw.githubusercontent.com/Ran-n/svgs/main/divisas/bitcoin/bitcoin_0.svg" width="20" alt="bitcoin logo" title="Bitcoin">  
 bc1q79vja8jzr27dxaf3ylu7e49ady8zq0jsm5qfk6
