@@ -13,5 +13,6 @@ src/coinmarketcap_scrapper/ligazons.db
 src/coinmarketcap_scrapper.egg-info/PKG-INFO
 src/coinmarketcap_scrapper.egg-info/SOURCES.txt
 src/coinmarketcap_scrapper.egg-info/dependency_links.txt
+src/coinmarketcap_scrapper.egg-info/not-zip-safe
 src/coinmarketcap_scrapper.egg-info/requires.txt
 src/coinmarketcap_scrapper.egg-info/top_level.txt
