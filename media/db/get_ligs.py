@@ -3,11 +3,10 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/03 21:05:26.106045
-#+ Editado:	2022/02/02 14:06:28.217837
+#+ Editado:	2022/02/05 22:50:51.102775
 # ------------------------------------------------------------------------------
 import requests as r
 from bs4 import BeautifulSoup as bs
-import pandas as pd
 from datetime import datetime
 import sqlite3
 from secrets import token_urlsafe as tus

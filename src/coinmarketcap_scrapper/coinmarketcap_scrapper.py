@@ -3,8 +3,9 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/01 20:23:55.455964
-#+ Editado:	2022/01/30 13:25:59.541461
+#+ Editado:	2022/02/06 13:07:03.339506
 # ------------------------------------------------------------------------------
+from typing import Optional, List, Union, Tuple
 import requests as r
 from bs4 import BeautifulSoup as bs
 from math import ceil
@@ -12,11 +13,15 @@ from Levenshtein import distance
 from time import time
 import sqlite3
 import sys
-from typing import Optional, List, Union
+import os
 
 from .excepcions import ErroTipado, ErroPaxinaInaccesibel
 from .cmc_uteis import lazy_check_types
+
+from .__variables import RAIZ
 # ------------------------------------------------------------------------------
+
+# xFCR: crear un ficheiro temporal para que se fai varias request moi seguidas non moleste á paxina
 class CoinMarketCap:
     # atributos de clase
     __pax: int = 1
@@ -30,20 +35,32 @@ class CoinMarketCap:
     # --------------------------------------------------------------------------
 
     # Getters ------------------------------------------------------------------
+
+    def __get_from_db(self, sentenza, todos = True) -> Tuple[str]:
+        # se mete mal o tipo dos valores saca erro
+        if not lazy_check_types(todos, bool):
+            raise ErroTipado('O tipo da "todos" non entra dentro do esperado (bool)')
+
+        con = sqlite3.connect(os.path.join(RAIZ, 'ligazons.db'))
+        cur = con.cursor()
+
+        if todos:
+            resultado = cur.execute(sentenza).fetchall()
+        else:
+            resultado = cur.execute(sentenza).fetchone()
+
+        con.close()
+
+        return resultado
+
     def get_pax(self) -> int:
         return self.__pax
 
     def get_url(self) -> str:
         return self.__url
 
-    def get_con(self) -> None:
-        return sqlite3.connect('./media/db/ligazons.db')
-
     def get_url_pax(self, nova_pax: Optional[int] = 0) -> str:
-        if nova_pax:
-            self.__pax = nova_pax
-
-        return self.__url+'/?page='+str(self.__pax)
+        return self.__url+'/?page='+str(nova_pax)
 
     # --------------------------------------------------------------------------
 
@@ -118,7 +135,7 @@ class CoinMarketCap:
         #while pax<=ceil(topx/100):
         while True:
             try:
-                pax_web = r.get(self.get_url_pax())
+                pax_web = r.get(self.get_url_pax(pax))
 
                 if pax_web.status_code == 404:
                     raise ErroPaxinaInaccesibel
@@ -214,8 +231,8 @@ class CoinMarketCap:
         return lista_top
 
     # xFCRF devolve soamente usd, molaría para o futuro implementar outras
-    # get_coin
-    def get_coin(self, buscado: str, xvalor: Optional[str] = 'nome') -> dict:
+    # get_moeda
+    def get_moeda(self, buscado: str, xvalor: Optional[str] = 'nome') -> dict:
         """
         Devolve toda a información posible sobre a moeda inquirida.
 
@@ -232,18 +249,17 @@ class CoinMarketCap:
 
         # se mete mal o tipo dos valores saca erro
         if not lazy_check_types([buscado, xvalor], [str, str]):
-            raise ErroTipado('O tipo da variable non entra dentro do esperado (int)')
+            raise ErroTipado('O tipo da variable non entra dentro do esperado (str)')
+
+        CHAR_NULL = '--'
 
         # se mete un campo raro busca por nome
         if xvalor not in ['nome', 'simbolo']:
             xvalor = 'nome'
 
-        con = self.get_con()
-        cur = con.cursor()
-
         buscado_sentenza = '%'.join(list(buscado))
         sentenza = f'select id, {xvalor} from moeda where {xvalor} like "%{buscado_sentenza}%"'
-        busqueda = cur.execute(sentenza).fetchall()
+        busqueda = self.__get_from_db(sentenza)
 
         # non atopou ningún
         if len(busqueda) == 0:
@@ -257,7 +273,7 @@ class CoinMarketCap:
                 min_distancia = distancia
                 id_buscado = moeda[0]
 
-        obx_buscado = cur.execute(f'select simbolo, nome, ligazon from moeda where id={id_buscado}').fetchone()
+        obx_buscado = self.__get_from_db(f'select simbolo, nome, ligazon from moeda where id={id_buscado}', todos=False)
 
         pax_web = r.get(self.get_url()+obx_buscado[2])
 
@@ -279,16 +295,19 @@ class CoinMarketCap:
         try:
             max_supply = supplies[0].text
         except:
-            max_supply = '-'
+            max_supply = CHAR_NULL
+
         try:
             supply = supplies[1].text
         except:
-            supply = '-'
+            supply = CHAR_NULL
 
         supply_percentage = soup.find(class_='supplyBlockPercentage').text
         watchlists = soup.find_all(class_='namePill')[2].text.split(' ')[1]
 
-        con.close()
+        if fully_diluted_mc == '- -': fully_diluted_mc = CHAR_NULL
+        if market_cap == '- -': market_cap = CHAR_NULL
+        if supply_percentage == '': supply_percentage = CHAR_NULL
 
         return {
                 'timestamp': time(),
@@ -308,4 +327,3 @@ class CoinMarketCap:
                 }
 
 # ------------------------------------------------------------------------------
-
