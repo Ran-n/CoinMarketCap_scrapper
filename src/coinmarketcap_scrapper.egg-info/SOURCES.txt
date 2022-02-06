@@ -3,8 +3,6 @@ MANIFEST.in
 README.md
 pyproject.toml
 setup.cfg
-./media/db/ligazons.db
-media/db/ligazons.db
 src/coinmarketcap_scrapper/__init__.py
 src/coinmarketcap_scrapper/__variables.py
 src/coinmarketcap_scrapper/cmc_uteis.py
