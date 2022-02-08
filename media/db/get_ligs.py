@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/03 21:05:26.106045
-#+ Editado:	2022/02/07 19:21:32.575811
+#+ Editado:	2022/02/08 08:52:42.399107
 # ------------------------------------------------------------------------------
 
 import requests as r
@@ -13,7 +13,7 @@ from datetime import datetime
 import sqlite3
 from sqlite3 import Cursor
 from secrets import token_urlsafe as tus
-from typing import Optional
+from typing import Optional, Dict, Union
 
 from uteis.imprimir import jprint
 
@@ -36,7 +36,7 @@ def get_url_trending() -> str:
 def get_url_mais_visitados() -> str:
     return 'https://coinmarketcap.com/most-viewed-pages'
 
-def print_info_db() -> dict:
+def print_info_db() -> Dict[str, str]:
     print()
     info = info_db.main()
     print(f'{info["cantidade"]} entradas totais na DB.')
@@ -44,7 +44,9 @@ def print_info_db() -> dict:
 
     return info
 
-def scrape(cur: Cursor, paxina_web: str, info_db_ini: dict, pax: Optional[int] = None) -> None:
+def scrape(cur: Cursor, paxina_web: str, info_db_ini: Dict[str, str], pax: Optional[Union[int, str]] = None) -> None:
+    global num_engadidos
+
     soup = bs(paxina_web.text, 'html.parser')
     taboa = soup.find('table').tbody.find_all('tr')
 
@@ -101,7 +103,7 @@ def scrape(cur: Cursor, paxina_web: str, info_db_ini: dict, pax: Optional[int] =
                 if pax:
                     print(f'Engadido novo elemento da páxina {pax}')
                 else:
-                    print(f'Engadido novo elemento da páxina de novidades')
+                    print('Engadido novo elemento.')
                 jprint({
                     'id': info_db_ini['cantidade']+num_engadidos,
                     'simbolo': simbolo,
@@ -111,7 +113,7 @@ def scrape(cur: Cursor, paxina_web: str, info_db_ini: dict, pax: Optional[int] =
                 print()
 
 
-def scrape_auxiliar(cur: Cursor, info_db_ini: dict, auxiliar: str) -> None:
+def scrape_auxiliar(cur: Cursor, info_db_ini: Dict[str, str], auxiliar: str) -> None:
 
     auxiliares = {
             'gan_per': ['gañadores/perdedores', get_url_gan_per()],
@@ -130,9 +132,9 @@ def scrape_auxiliar(cur: Cursor, info_db_ini: dict, auxiliar: str) -> None:
 
 
     if paxina_web.status_code != 404:
-        scrape(cur, paxina_web, num_engadidos, info_db_ini)
+        scrape(cur, paxina_web, info_db_ini, auxiliares[auxiliar][0])
         if DEBUG and num_engadidos == 0:
-            print('Non se engadiu ningunha entrada da páxina.')
+            print(f'Non se engadiu ningunha entrada da páxina {auxiliares[auxiliar][0]}.')
     else:
         if DEBUG: print('Páxina inaccesíbel.')
 
@@ -164,41 +166,54 @@ def scrape_inicio(cur: Cursor, info_db_ini: dict) -> None:
 # ------------------------------------------------------------------------------
 
 def main():
-    con = sqlite3.connect(DB)
-    cur = con.cursor()
 
-    # mostrar os datos iniciais
-    if DEBUG:
-        print(datetime.now())
-        info_db_ini = print_info_db()
+    try:
+        con = sqlite3.connect(DB)
+        cur = con.cursor()
 
-    scrape_auxiliar(cur, info_db_ini, 'gan_per')
 
-    if DEBUG: print()
+        # mostrar os datos iniciais
+        if DEBUG:
+            print(datetime.now())
+            info_db_ini = print_info_db()
 
-    scrape_auxiliar(cur, info_db_ini, 'trending')
+        scrape_auxiliar(cur, info_db_ini, 'gan_per')
 
-    if DEBUG: print()
+        if DEBUG: print()
 
-    scrape_auxiliar(cur, info_db_ini, '+visit')
+        scrape_auxiliar(cur, info_db_ini, 'trending')
 
-    if DEBUG: print()
+        if DEBUG: print()
 
-    scrape_auxiliar(cur, info_db_ini, 'novos')
+        scrape_auxiliar(cur, info_db_ini, '+visit')
 
-    if DEBUG: print()
+        if DEBUG: print()
 
-    scrape_inicio(cur, info_db_ini)
+        scrape_auxiliar(cur, info_db_ini, 'novos')
 
-    if DEBUG: print()
+        if DEBUG: print()
 
-    con.commit()
-    con.close()
+        scrape_inicio(cur, info_db_ini)
 
-    if DEBUG:
-        print(f'Engadidas un total de {num_engadidos} entradas.')
-        print_info_db()
-        print(datetime.now())
+        if DEBUG: print()
+
+        con.commit()
+        con.close()
+
+        if DEBUG:
+            print(f'Engadidas un total de {num_engadidos} entradas.')
+            print_info_db()
+            print(datetime.now())
+    except KeyboardInterrupt:
+        print('\n\nPechando o programa')
+
+        con.commit()
+        con.close()
+
+        if DEBUG:
+            print(f'Engadidas un total de {num_engadidos} entradas.')
+            print_info_db()
+            print(datetime.now())
 
 # ------------------------------------------------------------------------------
 
