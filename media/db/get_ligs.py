@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/03 21:05:26.106045
-#+ Editado:	2022/02/08 08:52:42.399107
+#+ Editado:	2022/02/09 11:47:22.630763
 # ------------------------------------------------------------------------------
 
 import requests as r
@@ -44,8 +44,11 @@ def print_info_db() -> Dict[str, str]:
 
     return info
 
-def scrape(cur: Cursor, paxina_web: str, info_db_ini: Dict[str, str], pax: Optional[Union[int, str]] = None) -> None:
+# ------------------------------------------------------------------------------
+
+def scrape_auxiliar(cur: Cursor, paxina_web: str, info_db_ini: Dict[str, str], pax: Optional[Union[int, str]] = None) -> None:
     global num_engadidos
+    cant_engadidos = num_engadidos
 
     soup = bs(paxina_web.text, 'html.parser')
     taboa = soup.find('table').tbody.find_all('tr')
@@ -110,10 +113,11 @@ def scrape(cur: Cursor, paxina_web: str, info_db_ini: Dict[str, str], pax: Optio
                     'nome': nome,
                     'ligazon': ligazon
                     })
-                print()
+
+    return num_engadidos-cant_engadidos
 
 
-def scrape_auxiliar(cur: Cursor, info_db_ini: Dict[str, str], auxiliar: str) -> None:
+def scrape(cur: Cursor, info_db_ini: Dict[str, str], auxiliar: str) -> None:
 
     auxiliares = {
             'gan_per': ['gañadores/perdedores', get_url_gan_per()],
@@ -130,13 +134,14 @@ def scrape_auxiliar(cur: Cursor, info_db_ini: Dict[str, str], auxiliar: str) -> 
     except Exception as e:
         raise e
 
-
     if paxina_web.status_code != 404:
-        scrape(cur, paxina_web, info_db_ini, auxiliares[auxiliar][0])
-        if DEBUG and num_engadidos == 0:
+        cant_engadidos = scrape_auxiliar(cur, paxina_web, info_db_ini, auxiliares[auxiliar][0])
+        if DEBUG and cant_engadidos == 0:
             print(f'Non se engadiu ningunha entrada da páxina {auxiliares[auxiliar][0]}.')
     else:
         if DEBUG: print('Páxina inaccesíbel.')
+
+    if DEBUG: print()
 
 def scrape_inicio(cur: Cursor, info_db_ini: dict) -> None:
     pax = 1
@@ -154,7 +159,7 @@ def scrape_inicio(cur: Cursor, info_db_ini: dict) -> None:
             break
 
         try:
-            scrape(cur, paxina_web, info_db_ini, pax)
+            scrape_auxiliar(cur, paxina_web, info_db_ini, pax)
 
             #con.commit()
             pax+=1
@@ -162,6 +167,8 @@ def scrape_inicio(cur: Cursor, info_db_ini: dict) -> None:
         except Exception as e:
             if DEBUG: print(f'Erro: {e}'); print(f'Escrapeadas un total de {pax} páxinas')
             break
+
+    if DEBUG: print()
 
 # ------------------------------------------------------------------------------
 
@@ -177,25 +184,12 @@ def main():
             print(datetime.now())
             info_db_ini = print_info_db()
 
-        scrape_auxiliar(cur, info_db_ini, 'gan_per')
-
-        if DEBUG: print()
-
-        scrape_auxiliar(cur, info_db_ini, 'trending')
-
-        if DEBUG: print()
-
-        scrape_auxiliar(cur, info_db_ini, '+visit')
-
-        if DEBUG: print()
-
-        scrape_auxiliar(cur, info_db_ini, 'novos')
-
-        if DEBUG: print()
+        scrape(cur, info_db_ini, 'gan_per')
+        scrape(cur, info_db_ini, 'trending')
+        scrape(cur, info_db_ini, '+visit')
+        scrape(cur, info_db_ini, 'novos')
 
         scrape_inicio(cur, info_db_ini)
-
-        if DEBUG: print()
 
         con.commit()
         con.close()
