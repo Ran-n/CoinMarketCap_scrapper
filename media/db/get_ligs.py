@@ -3,10 +3,10 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/03 21:05:26.106045
-#+ Editado:	2022/02/09 11:47:22.630763
+#+ Editado:	2022/02/12 14:32:35.113479
 # ------------------------------------------------------------------------------
 
-import requests as r
+#import requests as r
 from bs4 import BeautifulSoup as bs
 from bs4.element import ResultSet
 from datetime import datetime
@@ -16,6 +16,7 @@ from secrets import token_urlsafe as tus
 from typing import Optional, Dict, Union
 
 from uteis.imprimir import jprint
+from conexions.xproxie import porProxie
 
 import info_db
 
@@ -117,7 +118,7 @@ def scrape_auxiliar(cur: Cursor, paxina_web: str, info_db_ini: Dict[str, str], p
     return num_engadidos-cant_engadidos
 
 
-def scrape(cur: Cursor, info_db_ini: Dict[str, str], auxiliar: str) -> None:
+def scrape(cur: Cursor, info_db_ini: Dict[str, str], auxiliar: str, r: porProxie) -> None:
 
     auxiliares = {
             'gan_per': ['gañadores/perdedores', get_url_gan_per()],
@@ -143,13 +144,12 @@ def scrape(cur: Cursor, info_db_ini: Dict[str, str], auxiliar: str) -> None:
 
     if DEBUG: print()
 
-def scrape_inicio(cur: Cursor, info_db_ini: dict) -> None:
+def scrape_inicio(cur: Cursor, info_db_ini: dict, r: porProxie) -> None:
     pax = 1
 
     if DEBUG: print('* Páxina principal')
     while True:
-        if DEBUG: print(f'Escrapeando a páxina {pax}', end='\r')
-
+        if DEBUG: print(f'Escrapeando a páxina {pax} coa IP {r.get_ip().text.rstrip()}', end='\r')
         paxina_web = r.get(get_url(pax))
 
         if paxina_web.status_code == 404:
@@ -175,6 +175,7 @@ def scrape_inicio(cur: Cursor, info_db_ini: dict) -> None:
 def main():
 
     try:
+        r = porProxie()
         con = sqlite3.connect(DB)
         cur = con.cursor()
 
@@ -184,12 +185,12 @@ def main():
             print(datetime.now())
             info_db_ini = print_info_db()
 
-        scrape(cur, info_db_ini, 'gan_per')
-        scrape(cur, info_db_ini, 'trending')
-        scrape(cur, info_db_ini, '+visit')
-        scrape(cur, info_db_ini, 'novos')
+        scrape(cur, info_db_ini, 'gan_per', r)
+        scrape(cur, info_db_ini, 'trending', r)
+        scrape(cur, info_db_ini, '+visit', r)
+        scrape(cur, info_db_ini, 'novos', r)
 
-        scrape_inicio(cur, info_db_ini)
+        scrape_inicio(cur, info_db_ini, r)
 
         con.commit()
         con.close()

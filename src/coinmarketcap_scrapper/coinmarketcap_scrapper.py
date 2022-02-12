@@ -3,17 +3,19 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/01 20:23:55.455964
-#+ Editado:	2022/02/06 13:07:03.339506
+#+ Editado:	2022/02/12 18:46:20.028483
 # ------------------------------------------------------------------------------
 from typing import Optional, List, Union, Tuple
-import requests as r
+#import requests as r
 from bs4 import BeautifulSoup as bs
 from math import ceil
 from Levenshtein import distance
-from time import time
+from datetime import datetime
 import sqlite3
 import sys
 import os
+
+from conexions.xproxie import porProxie
 
 from .excepcions import ErroTipado, ErroPaxinaInaccesibel
 from .cmc_uteis import lazy_check_types
@@ -86,6 +88,7 @@ class CoinMarketCap:
 
         dic_info = {}
         dic_domin = {}
+        r = porProxie()
 
         pax_web = r.get(self.get_url())
 
@@ -131,6 +134,7 @@ class CoinMarketCap:
         pax = 1
         lista_top = []
         tope = topx
+        r = porProxie()
 
         #while pax<=ceil(topx/100):
         while True:
@@ -251,7 +255,9 @@ class CoinMarketCap:
         if not lazy_check_types([buscado, xvalor], [str, str]):
             raise ErroTipado('O tipo da variable non entra dentro do esperado (str)')
 
-        CHAR_NULL = '--'
+        #CHAR_NULL = '--'
+        CHAR_NULL = None
+        r = porProxie()
 
         # se mete un campo raro busca por nome
         if xvalor not in ['nome', 'simbolo']:
@@ -281,6 +287,28 @@ class CoinMarketCap:
             raise ErroPaxinaInaccesibel
 
         soup = bs(pax_web.text, 'html.parser')
+
+        datos = []
+        for taboa in soup.find_all('table'):
+            for ele in taboa.find_all('td'):
+                datos.append(ele)
+
+        prezo = datos[0].text[1:]
+        divisa_ref = datos[0].text[0]
+        price_change_pctx_24h = datos[1].text[1:]
+        max_24h, min_24h = datos[2].text.replace('$','').split(' / ')
+        trading_volume_24h = datos[3].find_all('span')[0].text.replace('$','').replace(',','')
+        trading_volume_pctx_24h = datos[3].find_all('span')[1].text[:-1]
+        volume_dividido_market_cap = datos[4].text
+        dominancia_mercado = datos[5].text[:-1]
+        rango = datos[6].text
+        market_cap = datos[7].find_all('span')[0].text.replace('$','').replace(',','')
+        market_cap_change_pctx = datos[7].find_all('span')[0].text[:-1]
+        fully_diluted_market_cap = datos[8].find_all('span')[0].text.replace('$','').replace(',','')
+        fully_diluted_market_cap_change_pctx = datos[7].find_all('span')[0].text[:-1]
+
+
+        """
         rango = soup.find(class_='namePill namePillPrimary').text.split(' ')[1]
         prezo = soup.find(class_='priceValue').text
 
@@ -309,14 +337,20 @@ class CoinMarketCap:
         if market_cap == '- -': market_cap = CHAR_NULL
         if supply_percentage == '': supply_percentage = CHAR_NULL
 
+        if circulating_supply == '': circulating_supply = CHAR_NULL
+        if max_supply == '': max_supply = CHAR_NULL
+        if volume_market_cap == '': volume_market_cap = CHAR_NULL
+        if prezo == '': prezo = CHAR_NULL
+        """
+
         return {
-                'timestamp': time(),
+                'timestamp': datetime.now(),
                 'rango': rango,
                 'simbolo': obx_buscado[0],
                 'nome': obx_buscado[1],
                 'prezo': prezo,
                 'market_cap': market_cap,
-                'fully_diluted_market__cap': fully_diluted_mc,
+                'fully_diluted_market_cap': fully_diluted_mc,
                 'volume_24h': vol24h,
                 'circulating_supply': circulating_supply,
                 'circulating_supply_percentage': supply_percentage,
