@@ -3,9 +3,10 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/03 21:05:26.106045
-#+ Editado:	2022/02/12 14:32:35.113479
+#+ Editado:	2022/02/17 07:54:00.549054
 # ------------------------------------------------------------------------------
 
+import sys
 #import requests as r
 from bs4 import BeautifulSoup as bs
 from bs4.element import ResultSet
@@ -128,7 +129,7 @@ def scrape(cur: Cursor, info_db_ini: Dict[str, str], auxiliar: str, r: porProxie
             }
 
     try:
-        if DEBUG: print(f'* Páxina de {auxiliares[auxiliar][0]}')
+        if DEBUG: print(f'{datetime.now()}\n* Páxina de {auxiliares[auxiliar][0]}')
         paxina_web = r.get(auxiliares[auxiliar][1])
     except KeyError:
         raise Exception('Páxina inexistente.')
@@ -147,9 +148,11 @@ def scrape(cur: Cursor, info_db_ini: Dict[str, str], auxiliar: str, r: porProxie
 def scrape_inicio(cur: Cursor, info_db_ini: dict, r: porProxie) -> None:
     pax = 1
 
-    if DEBUG: print('* Páxina principal')
+    if DEBUG: print(f'{datetime.now()}\n* Páxina principal')
     while True:
-        if DEBUG: print(f'Escrapeando a páxina {pax} coa IP {r.get_ip().text.rstrip()}', end='\r')
+        if DEBUG:
+            print(f'{datetime.now()} | Escrapeando a páxina {pax} coa IP {r.get_ip().text.rstrip()}')
+        #if DEBUG: print(f'Escrapeando a páxina {pax} coa IP {r.get_ip().text.rstrip()}', end='\r')
         paxina_web = r.get(get_url(pax))
 
         if paxina_web.status_code == 404:
