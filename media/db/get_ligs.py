@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/03 21:05:26.106045
-#+ Editado:	2022/02/17 07:54:00.549054
+#+ Editado:	2022/02/19 18:13:12.910833
 # ------------------------------------------------------------------------------
 
 import sys
@@ -17,7 +17,7 @@ from secrets import token_urlsafe as tus
 from typing import Optional, Dict, Union
 
 from uteis.imprimir import jprint
-from conexions.xproxie import porProxie
+from conexions import Proxy
 
 import info_db
 
@@ -106,7 +106,7 @@ def scrape_auxiliar(cur: Cursor, paxina_web: str, info_db_ini: Dict[str, str], p
             if DEBUG:
                 num_engadidos += 1
                 if pax:
-                    print(f'Engadido novo elemento da páxina {pax}')
+                    print(f'Engadido novo elemento da páxina {pax} coa IP {r.get_proxy().ip}')
                 else:
                     print('Engadido novo elemento.')
                 jprint({
@@ -119,7 +119,7 @@ def scrape_auxiliar(cur: Cursor, paxina_web: str, info_db_ini: Dict[str, str], p
     return num_engadidos-cant_engadidos
 
 
-def scrape(cur: Cursor, info_db_ini: Dict[str, str], auxiliar: str, r: porProxie) -> None:
+def scrape(cur: Cursor, info_db_ini: Dict[str, str], auxiliar: str, r: Proxy) -> None:
 
     auxiliares = {
             'gan_per': ['gañadores/perdedores', get_url_gan_per()],
@@ -145,13 +145,13 @@ def scrape(cur: Cursor, info_db_ini: Dict[str, str], auxiliar: str, r: porProxie
 
     if DEBUG: print()
 
-def scrape_inicio(cur: Cursor, info_db_ini: dict, r: porProxie) -> None:
+def scrape_inicio(cur: Cursor, info_db_ini: dict, r: Proxy) -> None:
     pax = 1
 
     if DEBUG: print(f'{datetime.now()}\n* Páxina principal')
     while True:
         if DEBUG:
-            print(f'{datetime.now()} | Escrapeando a páxina {pax} coa IP {r.get_ip().text.rstrip()}')
+            print(f'{datetime.now()} | Escrapeando a páxina {pax} coa IP {r.get_proxy().ip}')
         #if DEBUG: print(f'Escrapeando a páxina {pax} coa IP {r.get_ip().text.rstrip()}', end='\r')
         paxina_web = r.get(get_url(pax))
 
@@ -168,6 +168,7 @@ def scrape_inicio(cur: Cursor, info_db_ini: dict, r: porProxie) -> None:
             pax+=1
 
         except Exception as e:
+            print(pax_web.text)
             if DEBUG: print(f'Erro: {e}'); print(f'Escrapeadas un total de {pax} páxinas')
             break
 
@@ -178,7 +179,7 @@ def scrape_inicio(cur: Cursor, info_db_ini: dict, r: porProxie) -> None:
 def main():
 
     try:
-        r = porProxie()
+        r = Proxy()
         con = sqlite3.connect(DB)
         cur = con.cursor()
 
