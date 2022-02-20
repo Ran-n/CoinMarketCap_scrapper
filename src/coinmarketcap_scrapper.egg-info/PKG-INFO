@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: coinmarketcap-scrapper
-Version: 2.1
+Version: 2.2
 Summary: Scrapper of the CoinMarketCap website
 Home-page: https://wwww.github.com/Ran-n/coinmarketcap_scrapper
 Author: Ran#
@@ -13,7 +13,7 @@ Classifier: Environment :: Console
 Classifier: Intended Audience :: Developers
 Classifier: License :: OSI Approved :: GNU General Public License v3 (GPLv3)
 Classifier: Operating System :: OS Independent
-Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.10.1
 Classifier: Topic :: Software Development :: Libraries
 Classifier: Topic :: Text Processing :: General
 Classifier: Natural Language :: Galician

@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/03 21:05:26.106045
-#+ Editado:	2022/02/19 18:13:12.910833
+#+ Editado:	2022/02/20 13:48:46.091861
 # ------------------------------------------------------------------------------
 
 import sys
@@ -106,7 +106,7 @@ def scrape_auxiliar(cur: Cursor, paxina_web: str, info_db_ini: Dict[str, str], p
             if DEBUG:
                 num_engadidos += 1
                 if pax:
-                    print(f'Engadido novo elemento da páxina {pax} coa IP {r.get_proxy().ip}')
+                    print(f'Engadido novo elemento da páxina {pax}')
                 else:
                     print('Engadido novo elemento.')
                 jprint({
