@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/01 20:23:55.455964
-#+ Editado:	2022/02/20 16:04:34.924481
+#+ Editado:	2022/02/20 21:16:08.621891
 # ------------------------------------------------------------------------------
 from typing import Optional, List, Union, Tuple
 #import requests as r
@@ -316,9 +316,13 @@ class CoinMarketCap:
         # prezo
         prezo = self.__fora_extras(datos[0].text, divisa_ref)
         # price_change
-        prime, secon, terce = datos[1].find_all('span')
-        price_change_24h = self.__fora_extras(prime.text, divisa_ref)
-        price_change_pctx_24h = self.__mais_menos(terce)+secon.text
+        try:
+            prime, secon, terce = datos[1].find_all('span')
+            price_change_24h = self.__fora_extras(prime.text, divisa_ref)
+            price_change_pctx_24h = self.__mais_menos(terce)+secon.text
+        except:
+            price_change_24h = CHAR_NULL
+            price_change_pctx_24h = CHAR_NULL
         # min/max 24h
         max_24h, min_24h = [ele.rstrip() for ele in self.__fora_extras(datos[2].text, divisa_ref).split('/')]
         # trading volume 24h
@@ -344,9 +348,13 @@ class CoinMarketCap:
             market_cap = CHAR_NULL
             market_cap_change_pctx = CHAR_NULL
         # fully diluted market cap
-        prime, secon, terce = datos[8].find_all('span')
-        fully_diluted_market_cap = self.__fora_extras(prime.text, divisa_ref)
-        fully_diluted_market_cap_change_pctx = self.__mais_menos(terce)+secon.text
+        try:
+            prime, secon, terce = datos[8].find_all('span')
+            fully_diluted_market_cap = self.__fora_extras(prime.text, divisa_ref)
+            fully_diluted_market_cap_change_pctx = self.__mais_menos(terce)+secon.text
+        except:
+            fully_diluted_market_cap = CHAR_NULL
+            fully_diluted_market_cap_change_pctx = CHAR_NULL
         # min/max onte
         max_onte, min_onte = [ele.rstrip() for ele in self.__fora_extras(datos[9].text, divisa_ref).split('/')]
         # open/close onte
@@ -368,13 +376,21 @@ class CoinMarketCap:
         # min/max 52semanas
         min_52semanas, max_52semanas = [ele.rstrip() for ele in self.__fora_extras(datos[16].text, divisa_ref).split('/')]
         # all time high
-        prime, secon, terce = datos[17].find_all('span')
-        ath = self.__fora_extras(prime.text, divisa_ref)
-        ath_change_pctx = self.__mais_menos(terce)+secon.text
+        try:
+            prime, secon, terce = datos[17].find_all('span')
+            ath = self.__fora_extras(prime.text, divisa_ref)
+            ath_change_pctx = self.__mais_menos(terce)+secon.text
+        except:
+            ath = CHAR_NULL
+            ath_change_pctx = CHAR_NULL
         # all time low
-        prime, secon, terce = datos[18].find_all('span')
-        atl = self.__fora_extras(prime.text, divisa_ref)
-        atl_change_pctx = self.__mais_menos(terce)+secon.text
+        try:
+            prime, secon, terce = datos[18].find_all('span')
+            atl = self.__fora_extras(prime.text, divisa_ref)
+            atl_change_pctx = self.__mais_menos(terce)+secon.text
+        except:
+            atl = CHAR_NULL
+            atl_change_pctx = CHAR_NULL
         # roi da moeda (comprado no momento da saída ou no primeiro momento rexistrado)
         roi = datos[19].text
         if roi != 'No Data':
