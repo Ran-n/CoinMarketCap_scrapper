@@ -18,7 +18,7 @@ from .__variables import RAIZ
 # ------------------------------------------------------------------------------
 
 __nome__ = 'coinmarketcap_scrapper'
-__version__ = '2.3'
+__version__ = '2.4'
 __autor__ = 'Ran#'
 __creditos__ = 'Ran#'
 __licenza__ = 'GPLv3'

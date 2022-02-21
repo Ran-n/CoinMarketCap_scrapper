@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/01 20:23:55.455964
-#+ Editado:	2022/02/20 21:16:08.621891
+#+ Editado:	2022/02/21 16:12:35.514623
 # ------------------------------------------------------------------------------
 from typing import Optional, List, Union, Tuple
 #import requests as r
@@ -34,6 +34,7 @@ class CoinMarketCap:
         # variables da instancia
         self.__pax = self.__pax
         self.__url = self.__url
+        self.r = Proxy()
     # --------------------------------------------------------------------------
 
     # Getters ------------------------------------------------------------------
@@ -274,7 +275,6 @@ class CoinMarketCap:
             raise ErroTipado('O tipo da variable non entra dentro do esperado (str)')
 
         CHAR_NULL = None
-        r = Proxy()
 
         # se mete un campo raro busca por nome
         if xvalor not in ['nome', 'simbolo']:
@@ -298,7 +298,7 @@ class CoinMarketCap:
 
         obx_buscado = self.__get_from_db(f'select simbolo, nome, ligazon from moeda where id={id_buscado}', todos=False)
 
-        pax_web = r.get(self.get_url()+obx_buscado[2])
+        pax_web = self.r.get(self.get_url()+obx_buscado[2])
 
         if pax_web.status_code == 404:
             raise ErroPaxinaInaccesibel
@@ -339,6 +339,13 @@ class CoinMarketCap:
         dominancia_mercado = datos[5].text
         # rango
         rango = datos[6].text
+
+        # total value locked tvl
+        if len(datos) >= 48:
+            total_value_locked = self.__fora_extras(datos.pop(7).text)
+        else:
+            total_value_locked = CHAR_NULL
+
         # market cap
         try:
             prime, secon, terce = datos[7].find_all('span')
@@ -454,6 +461,7 @@ class CoinMarketCap:
                 'circulating_supply': circulating_supply,
                 'total_supply': total_supply,
                 'max_supply': max_supply,
+                'total_value_locked': total_value_locked,
                 'watchlists': watchlists
                 }
 
