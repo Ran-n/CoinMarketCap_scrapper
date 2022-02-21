@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/01 20:23:55.455964
-#+ Editado:	2022/02/21 16:12:35.514623
+#+ Editado:	2022/02/21 18:29:32.667712
 # ------------------------------------------------------------------------------
 from typing import Optional, List, Union, Tuple
 #import requests as r
@@ -89,9 +89,8 @@ class CoinMarketCap:
 
         dic_info = {}
         dic_domin = {}
-        r = Proxy()
 
-        pax_web = r.get(self.get_url())
+        pax_web = self.r.get(self.get_url())
 
         if pax_web.status_code == 404:
             raise ErroPaxinaInaccesibel
@@ -135,12 +134,11 @@ class CoinMarketCap:
         pax = 1
         lista_top = []
         tope = topx
-        r = Proxy()
 
         #while pax<=ceil(topx/100):
         while True:
             try:
-                pax_web = r.get(self.get_url_pax(pax))
+                pax_web = self.r.get(self.get_url_pax(pax))
 
                 if pax_web.status_code == 404:
                     raise ErroPaxinaInaccesibel
