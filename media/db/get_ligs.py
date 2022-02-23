@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/03 21:05:26.106045
-#+ Editado:	2022/02/20 13:48:46.091861
+#+ Editado:	2022/02/23 19:11:03.484779
 # ------------------------------------------------------------------------------
 
 import sys
@@ -99,6 +99,9 @@ def scrape_auxiliar(cur: Cursor, paxina_web: str, info_db_ini: Dict[str, str], p
             cur.execute('insert into moeda("simbolo", "nome", "ligazon", "data")'\
                 f' values("{simbolo}", "{nome}", "{ligazon}", "{datetime.now()}")')
         except sqlite3.IntegrityError:
+            #id_, nome_vello = cur.execute(f'select id, nome from moeda where ligazon="{ligazon}" and simbolo="{simbolo}"').fetchone()
+            #if nome != nome_vello:
+                #cur.execute(f'update moeda set nome="{nome}" where id={id_}')
             pass
         except Exception as e:
             raise e
@@ -179,7 +182,7 @@ def scrape_inicio(cur: Cursor, info_db_ini: dict, r: Proxy) -> None:
 def main():
 
     try:
-        r = Proxy()
+        r = Proxy(verbose= True)
         con = sqlite3.connect(DB)
         cur = con.cursor()
 
