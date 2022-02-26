@@ -3,10 +3,9 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/01 20:23:55.455964
-#+ Editado:	2022/02/21 18:29:32.667712
+#+ Editado:	2022/02/25 16:14:49.034590
 # ------------------------------------------------------------------------------
 from typing import Optional, List, Union, Tuple
-#import requests as r
 from bs4 import BeautifulSoup as bs
 from math import ceil
 from Levenshtein import distance
@@ -28,13 +27,17 @@ class CoinMarketCap:
     # atributos de clase
     __pax: int = 1
     __url: str = 'https://coinmarketcap.com'
+    __reintentos: int
 
     # Constructor --------------------------------------------------------------
-    def __init__(self) -> None:
+    def __init__(self, verbose= False) -> None:
         # variables da instancia
         self.__pax = self.__pax
         self.__url = self.__url
-        self.r = Proxy()
+        self.r = Proxy(verbose= verbose)
+        #self.r.set_reintentos(1)
+        self.r.set_timeout(10)
+        self.__reintentos = self.r.get_reintentos()
     # --------------------------------------------------------------------------
 
     # Getters ------------------------------------------------------------------
@@ -65,6 +68,12 @@ class CoinMarketCap:
     def get_url_pax(self, nova_pax: Optional[int] = 0) -> str:
         return self.__url+'/?page='+str(nova_pax)
 
+    def get_reintentos(self) -> int:
+        """
+        """
+
+        return self.__reintentos
+
     # --------------------------------------------------------------------------
 
     # Setters ------------------------------------------------------------------
@@ -72,10 +81,17 @@ class CoinMarketCap:
     def set_pax(self, nova_pax) -> None:
         self.__pax = nova_pax
 
+    def set_reintentos(self, nova_cant_reintentos) -> None:
+        """
+        """
+
+        self.__reintentos = nova_cant_reintentos
+        self.r.set_reintentos(nova_cant_reintentos)
+
     # --------------------------------------------------------------------------
 
     # get_info
-    def get_info(self) -> dict:
+    def get_info(self, reintentos: int = 0) -> dict:
         """
         Devolve a info xeral sobre o mercado.
 
@@ -89,6 +105,9 @@ class CoinMarketCap:
 
         dic_info = {}
         dic_domin = {}
+
+        if reintentos != 0:
+            self.set_reintentos(reintentos)
 
         pax_web = self.r.get(self.get_url())
 
@@ -113,7 +132,7 @@ class CoinMarketCap:
         return dic_info
 
     # get_top
-    def get_top(self, topx: Optional[int] = 10) -> List[dict]:
+    def get_top(self, topx: Optional[int] = 10, reintentos: int = 0) -> List[dict]:
         """
         Devolve o top de moedas en CoinMarketCap.
 
@@ -134,6 +153,9 @@ class CoinMarketCap:
         pax = 1
         lista_top = []
         tope = topx
+
+        if reintentos != 0:
+            self.set_reintentos(reintentos)
 
         #while pax<=ceil(topx/100):
         while True:
@@ -253,7 +275,7 @@ class CoinMarketCap:
 
     # xFCRF devolve soamente usd, molaría para o futuro implementar outras
     # get_moeda
-    def get_moeda(self, buscado: str, xvalor: Optional[str] = 'nome') -> dict:
+    def get_moeda(self, buscado: str, xvalor: Optional[str] = 'nome', reintentos: int = 0) -> dict:
         """
         Devolve toda a información posible sobre a moeda inquirida.
 
@@ -269,13 +291,16 @@ class CoinMarketCap:
         """
 
         # se mete mal o tipo dos valores saca erro
-        if not lazy_check_types([buscado, xvalor], [str, str]):
+        if not lazy_check_types([buscado, xvalor, reintentos], [str, str, int]):
             raise ErroTipado('O tipo da variable non entra dentro do esperado (str)')
 
         CHAR_NULL = None
 
+        if reintentos != 0:
+            self.set_reintentos(reintentos)
+
         # se mete un campo raro busca por nome
-        if xvalor not in ['nome', 'simbolo']:
+        if xvalor not in ['nome', 'simbolo', 'ligazon']:
             xvalor = 'nome'
 
         buscado_sentenza = '%'.join(list(buscado))
@@ -322,7 +347,10 @@ class CoinMarketCap:
             price_change_24h = CHAR_NULL
             price_change_pctx_24h = CHAR_NULL
         # min/max 24h
-        max_24h, min_24h = [ele.rstrip() for ele in self.__fora_extras(datos[2].text, divisa_ref).split('/')]
+        if datos[2].text != 'No Data':
+            max_24h, min_24h = [ele.rstrip() for ele in self.__fora_extras(datos[2].text, divisa_ref).split('/')]
+        else:
+            max_24h = min_24h = CHAR_NULL
         # trading volume 24h
         try:
             prime, secon, terce = datos[3].find_all('span')
@@ -361,9 +389,15 @@ class CoinMarketCap:
             fully_diluted_market_cap = CHAR_NULL
             fully_diluted_market_cap_change_pctx = CHAR_NULL
         # min/max onte
-        max_onte, min_onte = [ele.rstrip() for ele in self.__fora_extras(datos[9].text, divisa_ref).split('/')]
+        if datos[9].text != 'No Data':
+            max_onte, min_onte = [ele.rstrip() for ele in self.__fora_extras(datos[9].text, divisa_ref).split('/')]
+        else:
+            max_onte = min_onte = CHAR_NULL
         # open/close onte
-        onte_ini, onte_fin = [ele.rstrip() for ele in self.__fora_extras(datos[10].text, divisa_ref).split('/')]
+        if datos[10].text != 'No Data':
+            onte_ini, onte_fin = [ele.rstrip() for ele in self.__fora_extras(datos[10].text, divisa_ref).split('/')]
+        else:
+            onte_ini = onte_fin = CHAR_NULL
         # cambio onte
         price_change_pctx_onte = datos[11].text
         if 'red' in str(datos[11]):
@@ -373,13 +407,25 @@ class CoinMarketCap:
         # volume onte
         volume_onte = self.__fora_extras(datos[12].text, divisa_ref)
         # min/max 7d
-        min_7d, max_7d = [ele.rstrip() for ele in self.__fora_extras(datos[13].text, divisa_ref).split('/')]
+        if datos[13].text != 'No Data':
+            min_7d, max_7d = [ele.rstrip() for ele in self.__fora_extras(datos[13].text, divisa_ref).split('/')]
+        else:
+            min_7d = max_7d = CHAR_NULL
         # min/max 30d
-        min_30d, max_30d = [ele.rstrip() for ele in self.__fora_extras(datos[14].text, divisa_ref).split('/')]
+        if datos[14].text != 'No Data':
+            min_30d, max_30d = [ele.rstrip() for ele in self.__fora_extras(datos[14].text, divisa_ref).split('/')]
+        else:
+            min_30d = max_30d = CHAR_NULL
         # min/max 90d
-        min_90d, max_90d = [ele.rstrip() for ele in self.__fora_extras(datos[15].text, divisa_ref).split('/')]
+        if datos[15].text != 'No Data':
+            min_90d, max_90d = [ele.rstrip() for ele in self.__fora_extras(datos[15].text, divisa_ref).split('/')]
+        else:
+            min_90d = max_90d = CHAR_NULL
         # min/max 52semanas
-        min_52semanas, max_52semanas = [ele.rstrip() for ele in self.__fora_extras(datos[16].text, divisa_ref).split('/')]
+        if datos[16].text != 'No Data':
+            min_52semanas, max_52semanas = [ele.rstrip() for ele in self.__fora_extras(datos[16].text, divisa_ref).split('/')]
+        else:
+            min_52semanas = max_52semanas = CHAR_NULL
         # all time high
         try:
             prime, secon, terce = datos[17].find_all('span')
