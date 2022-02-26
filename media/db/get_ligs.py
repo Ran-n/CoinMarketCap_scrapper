@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/03 21:05:26.106045
-#+ Editado:	2022/02/23 19:11:03.484779
+#+ Editado:	2022/02/24 08:23:41.490509
 # ------------------------------------------------------------------------------
 
 import sys
@@ -182,7 +182,7 @@ def scrape_inicio(cur: Cursor, info_db_ini: dict, r: Proxy) -> None:
 def main():
 
     try:
-        r = Proxy(verbose= True)
+        r = Proxy(verbose= True, verbosalo= False)
         con = sqlite3.connect(DB)
         cur = con.cursor()
 
