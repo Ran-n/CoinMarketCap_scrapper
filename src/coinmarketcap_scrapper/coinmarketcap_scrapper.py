@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/01 20:23:55.455964
-#+ Editado:	2022/02/25 16:14:49.034590
+#+ Editado:	2022/02/27 13:37:24.469948
 # ------------------------------------------------------------------------------
 from typing import Optional, List, Union, Tuple
 from bs4 import BeautifulSoup as bs
@@ -27,17 +27,16 @@ class CoinMarketCap:
     # atributos de clase
     __pax: int = 1
     __url: str = 'https://coinmarketcap.com'
-    __reintentos: int
 
     # Constructor --------------------------------------------------------------
-    def __init__(self, verbose= False) -> None:
+    def __init__(self, verbose: bool = False, timeout: int = 10, reintentos: int = 5) -> None:
         # variables da instancia
         self.__pax = self.__pax
         self.__url = self.__url
+
         self.r = Proxy(verbose= verbose)
-        #self.r.set_reintentos(1)
-        self.r.set_timeout(10)
-        self.__reintentos = self.r.get_reintentos()
+        self.r.set_timeout(timeout)
+        self.r.set_reintentos(reintentos)
     # --------------------------------------------------------------------------
 
     # Getters ------------------------------------------------------------------
@@ -72,21 +71,44 @@ class CoinMarketCap:
         """
         """
 
-        return self.__reintentos
+        return self.r.get_reintentos()
+
+    def get_timeout(self) -> int:
+        """
+        """
+
+        return self.r.get_timeout()
+
+    def get_verbose(self) -> bool:
+        """
+        """
+
+        return self.r.get_verbose()
 
     # --------------------------------------------------------------------------
 
     # Setters ------------------------------------------------------------------
 
-    def set_pax(self, nova_pax) -> None:
+    def set_pax(self, nova_pax: int) -> None:
         self.__pax = nova_pax
 
-    def set_reintentos(self, nova_cant_reintentos) -> None:
+    def set_reintentos(self, nova_cant_reintentos: int) -> None:
         """
         """
 
-        self.__reintentos = nova_cant_reintentos
         self.r.set_reintentos(nova_cant_reintentos)
+
+    def set_timeout(self, novo_timeout: int) -> None:
+        """
+        """
+
+        self.r.set_timeout(novo_timeout)
+
+    def set_verbose(self, novo_verbose: Union[int, bool]) -> None:
+        """
+        """
+
+        self.r.set_timeout(novo_verbose)
 
     # --------------------------------------------------------------------------
 
@@ -458,7 +480,7 @@ class CoinMarketCap:
         if total_supply != 'No Data':
             total_supply = self.__fora_extras(total_supply.split(' ')[0])
         # max supply
-        max_supply = datos[20].text
+        max_supply = datos[22].text
         if max_supply != 'No Data':
             max_supply = self.__fora_extras(max_supply.split(' ')[0])
 

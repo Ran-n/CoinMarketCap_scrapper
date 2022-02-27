@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/02 12:34:15.530170
-#+ Editado:	2022/02/06 12:51:17.868106
+#+ Editado:	2022/02/27 13:12:01.305566
 # ------------------------------------------------------------------------------
 import unittest
 
@@ -12,7 +12,7 @@ from src.coinmarketcap_scrapper.coinmarketcap_scrapper import CoinMarketCap
 class TestCoinMarketCap_scrapper(unittest.TestCase):
 
     @staticmethod
-    def get_url_pax(pax=1):
+    def get_url_pax(pax: int = 0):
         return f'https://coinmarketcap.com/?page={pax}'
 
     # Getters ------------------------------------------------------------------
