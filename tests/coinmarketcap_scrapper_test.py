@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/02 12:34:15.530170
-#+ Editado:	2022/02/27 13:12:01.305566
+#+ Editado:	2022/02/27 14:39:02.543341
 # ------------------------------------------------------------------------------
 import unittest
 
@@ -84,9 +84,12 @@ class TestCoinMarketCap_scrapper(unittest.TestCase):
         cmc = CoinMarketCap()
 
         #cmc.get_top(0)
-        cmc.get_top(10)
-        #cmc.get_top(124)
         #cmc.get_top(200)
+        top1 = cmc.get_top(10)
+        top2 = cmc.get_top(124)
+
+        self.assertEqual(len(top1), 10)
+        self.assertEqual(len(top2), 124)
 
     # get_top # ----------------------------------------------------------------
 
@@ -100,9 +103,10 @@ class TestCoinMarketCap_scrapper(unittest.TestCase):
 
         cmc = CoinMarketCap()
 
-        cmc.get_moeda('shib', 'simbolo')
+        shiba_inu = cmc.get_moeda('SHIB', 'simbolo')
+
+        self.assertEqual(shiba_inu['nome'], 'Shiba Inu')
 
     # get_moeda # --------------------------------------------------------------
 
 # ------------------------------------------------------------------------------
-
