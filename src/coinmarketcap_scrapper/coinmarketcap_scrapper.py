@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/01 20:23:55.455964
-#+ Editado:	2022/02/27 13:37:24.469948
+#+ Editado:	2022/02/27 13:51:46.863860
 # ------------------------------------------------------------------------------
 from typing import Optional, List, Union, Tuple
 from bs4 import BeautifulSoup as bs
@@ -108,7 +108,7 @@ class CoinMarketCap:
         """
         """
 
-        self.r.set_timeout(novo_verbose)
+        self.r.set_verbose(novo_verbose)
 
     # --------------------------------------------------------------------------
 
