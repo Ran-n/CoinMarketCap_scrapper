@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/02 12:34:15.530170
-#+ Editado:	2022/02/27 14:39:02.543341
+#+ Editado:	2022/02/28 13:34:23.370058
 # ------------------------------------------------------------------------------
 import unittest
 
@@ -64,12 +64,13 @@ class TestCoinMarketCap_scrapper(unittest.TestCase):
     def test_get_info(self):
         """
         Uso normal.
-        NON TEN SENTIDO PQ NON TEÑO FORMA DE COMPROBAR
         """
 
         cmc = CoinMarketCap()
 
-        cmc.get_info()
+        info = cmc.get_info()
+
+        self.assertIsNotNone(info)
 
    # get_info # ---------------------------------------------------------------
 
@@ -78,7 +79,6 @@ class TestCoinMarketCap_scrapper(unittest.TestCase):
     def test_get_top(self):
         """
         Uso normal.
-        NON TEN SENTIDO PQ NON TEÑO FORMA DE COMPROBAR
         """
 
         cmc = CoinMarketCap()
@@ -87,6 +87,9 @@ class TestCoinMarketCap_scrapper(unittest.TestCase):
         #cmc.get_top(200)
         top1 = cmc.get_top(10)
         top2 = cmc.get_top(124)
+
+        self.assertIsNotNone(top1)
+        self.assertIsNotNone(top2)
 
         self.assertEqual(len(top1), 10)
         self.assertEqual(len(top2), 124)
@@ -98,14 +101,16 @@ class TestCoinMarketCap_scrapper(unittest.TestCase):
     def test_get_moeda(self):
         """
         Uso normal.
-        NON TEN SENTIDO PQ NON TEÑO FORMA DE COMPROBAR
         """
 
         cmc = CoinMarketCap()
 
         shiba_inu = cmc.get_moeda('SHIB', 'simbolo')
 
+        self.assertIsNotNone(shiba_inu)
+
         self.assertEqual(shiba_inu['nome'], 'Shiba Inu')
+        self.assertIsNone(shiba_inu['max_supply'])
 
     # get_moeda # --------------------------------------------------------------
 
