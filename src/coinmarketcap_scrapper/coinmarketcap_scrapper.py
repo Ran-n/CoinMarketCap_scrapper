@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/01 20:23:55.455964
-#+ Editado:	2022/02/27 13:51:46.863860
+#+ Editado:	2022/03/01 22:22:12.856945
 # ------------------------------------------------------------------------------
 from typing import Optional, List, Union, Tuple
 from bs4 import BeautifulSoup as bs
@@ -191,13 +191,8 @@ class CoinMarketCap:
                 taboa = soup.find('table').tbody.find_all('tr')
 
                 xpax = len(taboa)
-                if topx == 0:
-                    tope = xpax
 
-                # o tope fai que o programa sexa lixeiramente máis rápido
-                # no caso de que non se requira o scrape de tódolos elementos
-                # da páxina
-                for indice, fila in enumerate(taboa[:tope], 1):
+                for indice, fila in enumerate(taboa, 1):
                     # simbolo
                     try:
                         simbolo = fila.find(class_='crypto-symbol').text
@@ -264,18 +259,17 @@ class CoinMarketCap:
 
                 pax+=1
                 pasados += xpax
-                if topx != 0:
-                    tope -= pasados
 
                 # aki en lugar de no while pq asi podo sacar o xpax sen
                 # outro request idiota ou recursión
-                if (pax>ceil(topx/xpax)) and (topx!=0):
+                #if (pax>ceil(topx/xpax)) and (topx!=0):
+                if (pasados>=topx) and (topx!=0):
                     break
             # se peta saese do bucle
             except:
                 break
 
-        return lista_top
+        return lista_top[:topx]
 
     @staticmethod
     def __mais_menos(terce: str) -> str:
