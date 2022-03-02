@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/01 20:23:55.455964
-#+ Editado:	2022/03/01 22:22:12.856945
+#+ Editado:	2022/03/02 12:01:20.664629
 # ------------------------------------------------------------------------------
 from typing import Optional, List, Union, Tuple
 from bs4 import BeautifulSoup as bs
@@ -263,13 +263,14 @@ class CoinMarketCap:
                 # aki en lugar de no while pq asi podo sacar o xpax sen
                 # outro request idiota ou recursión
                 #if (pax>ceil(topx/xpax)) and (topx!=0):
-                if (pasados>=topx) and (topx!=0):
+                if (topx!=0) and (pasados>=topx):
+                    lista_top = lista_top[:topx]
                     break
             # se peta saese do bucle
             except:
                 break
 
-        return lista_top[:topx]
+        return lista_top
 
     @staticmethod
     def __mais_menos(terce: str) -> str:
