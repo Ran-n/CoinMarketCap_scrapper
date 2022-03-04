@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/03 21:05:26.106045
-#+ Editado:	2022/02/24 08:23:41.490509
+#+ Editado:	2022/03/04 08:41:03.941132
 # ------------------------------------------------------------------------------
 
 import sys
@@ -22,6 +22,9 @@ from conexions import Proxy
 import info_db
 
 # ------------------------------------------------------------------------------
+
+def get_url_moeda(moeda: str) -> str:
+    return 'https://coinmarketcap.com'+moeda
 
 def get_url(pax: int) -> str:
     return f'https://coinmarketcap.com/?page={pax}'
@@ -99,9 +102,6 @@ def scrape_auxiliar(cur: Cursor, paxina_web: str, info_db_ini: Dict[str, str], p
             cur.execute('insert into moeda("simbolo", "nome", "ligazon", "data")'\
                 f' values("{simbolo}", "{nome}", "{ligazon}", "{datetime.now()}")')
         except sqlite3.IntegrityError:
-            #id_, nome_vello = cur.execute(f'select id, nome from moeda where ligazon="{ligazon}" and simbolo="{simbolo}"').fetchone()
-            #if nome != nome_vello:
-                #cur.execute(f'update moeda set nome="{nome}" where id={id_}')
             pass
         except Exception as e:
             raise e
@@ -167,7 +167,6 @@ def scrape_inicio(cur: Cursor, info_db_ini: dict, r: Proxy) -> None:
         try:
             scrape_auxiliar(cur, paxina_web, info_db_ini, pax)
 
-            #con.commit()
             pax+=1
 
         except Exception as e:
@@ -179,13 +178,11 @@ def scrape_inicio(cur: Cursor, info_db_ini: dict, r: Proxy) -> None:
 
 # ------------------------------------------------------------------------------
 
-def main():
-
+def scraping() -> None:
     try:
-        r = Proxy(verbose= True, verbosalo= False)
+        r = Proxy(verbose= DEBUG, verbosalo= False)
         con = sqlite3.connect(DB)
         cur = con.cursor()
-
 
         # mostrar os datos iniciais
         if DEBUG:
@@ -199,16 +196,10 @@ def main():
 
         scrape_inicio(cur, info_db_ini, r)
 
-        con.commit()
-        con.close()
-
-        if DEBUG:
-            print(f'Engadidas un total de {num_engadidos} entradas.')
-            print_info_db()
-            print(datetime.now())
     except KeyboardInterrupt:
         print('\n\nPechando o programa')
 
+    finally:
         con.commit()
         con.close()
 
@@ -216,6 +207,65 @@ def main():
             print(f'Engadidas un total de {num_engadidos} entradas.')
             print_info_db()
             print(datetime.now())
+
+def manter() -> None:
+    try:
+        r = Proxy(verbose= DEBUG, verbosalo= False)
+        con = sqlite3.connect(DB)
+        cur = con.cursor()
+
+        # mostrar os datos iniciais
+        if DEBUG:
+            print(datetime.now())
+
+        #
+        # operacións
+        #
+        try:
+            for moeda in cur.execute('select * from moeda where borrado==0').fetchall():
+                paxina_web = r.get(get_url_moeda(moeda[3]))
+
+                if pax_web.status_code == 404:
+                    cur.execute(f'update moeda set borrado=1 where id="{moeda[0]}"')
+
+                soup = bs(paxina_web.text, 'html.parser')
+
+                contidos = []
+                for ele in soup.find(class_='h1').children:
+                    contidos.append(ele.text)
+
+                # simbolo
+                if contidos[1] != moeda[1]:
+                    pass
+
+                # nome
+                if contidos[0] != moeda[2]:
+                    pass
+
+        except:
+            pass
+
+    except KeyboardInterrupt:
+        print('\n\nPechando o programa')
+
+    finally:
+        con.commit()
+        con.close()
+
+        if DEBUG:
+            print(f'Engadidas un total de {num_engadidos} entradas.')
+            print_info_db()
+
+def main(opcion: str = 'scrape') -> None:
+    dic_ops = {
+            'scrape': scraping,
+            'manter': manter
+            }
+
+    if opcion in dic_ops.keys():
+        dic_ops[opcion]()
+    else:
+        raise 'Opción inexistente'
 
 # ------------------------------------------------------------------------------
 
@@ -224,6 +274,9 @@ DB = 'ligazons.db'
 num_engadidos = 0
 
 if __name__ == '__main__':
-    main()
+    try:
+        main(sys.argv[1])
+    except:
+        main()
 
 # ------------------------------------------------------------------------------
