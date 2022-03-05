@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/03 21:05:26.106045
-#+ Editado:	2022/03/04 08:41:03.941132
+#+ Editado:	2022/03/05 21:48:32.330924
 # ------------------------------------------------------------------------------
 
 import sys
@@ -208,7 +208,7 @@ def scraping() -> None:
             print_info_db()
             print(datetime.now())
 
-def manter() -> None:
+def manter(borrados:bool = False) -> None:
     try:
         r = Proxy(verbose= DEBUG, verbosalo= False)
         con = sqlite3.connect(DB)
@@ -222,11 +222,16 @@ def manter() -> None:
         # operacións
         #
         try:
-            for moeda in cur.execute('select * from moeda where borrado==0').fetchall():
+            sentenza = 'select * from moeda'
+            if not borrados:
+                sentenza += ' where borrado==0'
+
+            for moeda in cur.execute(sentenza).fetchall():
                 paxina_web = r.get(get_url_moeda(moeda[3]))
 
                 if pax_web.status_code == 404:
                     cur.execute(f'update moeda set borrado=1 where id="{moeda[0]}"')
+                    continue
 
                 soup = bs(paxina_web.text, 'html.parser')
 
@@ -256,8 +261,14 @@ def manter() -> None:
             print(f'Engadidas un total de {num_engadidos} entradas.')
             print_info_db()
 
+def axuda():
+    print('axuda\t-> Esta mensaxe')
+    print('scrape\t-> Escrapeo')
+    print('manter\t-> Tarefas de mantemento da DB')
+
 def main(opcion: str = 'scrape') -> None:
     dic_ops = {
+            'axuda': axuda,
             'scrape': scraping,
             'manter': manter
             }
