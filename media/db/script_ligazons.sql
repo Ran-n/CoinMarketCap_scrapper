@@ -3,8 +3,8 @@ CREATE TABLE IF NOT EXISTS "moeda"(
     "simbolo"           TEXT NOT NULL,
     "nome"              TEXT NOT NULL,
     "ligazon"           TEXT UNIQUE NOT NULL,
-    "data"              TEXT NOT NULL,
-    "data modificacion" TEXT,
-    "borrado"           INTEGER NOT NULL DEFAULT 0,
+    "creada"            TEXT NOT NULL,
+    "modificada"        TEXT,
+    "estado"            INTEGER NOT NULL DEFAULT 0,
     CONSTRAINT moedaPK PRIMARY KEY ("id")
 );
