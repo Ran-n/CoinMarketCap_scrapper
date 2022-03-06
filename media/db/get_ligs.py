@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/03 21:05:26.106045
-#+ Editado:	2022/03/06 21:14:23.073553
+#+ Editado:	2022/03/06 22:32:04.441178
 # ------------------------------------------------------------------------------
 
 import sys
@@ -247,10 +247,10 @@ def manter(quitar_borrados:bool = False) -> None:
                 sentenza = f'update moeda set [simbolo][nome][estado]modificada="{datetime.now()}" where id="{moeda[0]}"'
                 # simbolo
                 if contidos[1] != moeda[1]:
-                    sentenza.replace('[simbolo]', contidos[1]+', ')
+                    sentenza = sentenza.replace('[simbolo]', contidos[1]+', ')
                     mod = True
                 else:
-                    sentenza.replace('[simbolo]', '')
+                    sentenza = sentenza.replace('[simbolo]', '')
 
                 # nome
                 if contidos[0] != moeda[2]:
