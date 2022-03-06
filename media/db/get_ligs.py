@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/03 21:05:26.106045
-#+ Editado:	2022/03/06 10:49:52.323359
+#+ Editado:	2022/03/06 21:14:23.073553
 # ------------------------------------------------------------------------------
 
 import sys
@@ -100,7 +100,7 @@ def scrape_auxiliar(cur: Cursor, paxina_web: str, info_db_ini: Dict[str, str], p
         # ligazon #
 
         try:
-            cur.execute('insert into moeda("simbolo", "nome", "ligazon", "data")'\
+            cur.execute('insert into moeda("simbolo", "nome", "ligazon", "creada")'\
                 f' values("{simbolo}", "{nome}", "{ligazon}", "{datetime.now()}")')
         except sqlite3.IntegrityError:
             pass
@@ -209,7 +209,7 @@ def scraping() -> None:
             print_info_db()
             print(datetime.now())
 
-def manter(borrados:bool = False) -> None:
+def manter(quitar_borrados:bool = False) -> None:
     try:
         r = Proxy(verbose= False, verbosalo= False)
         con = sqlite3.connect(DB)
@@ -226,14 +226,14 @@ def manter(borrados:bool = False) -> None:
         #
         try:
             sentenza = 'select * from moeda'
-            if not borrados:
-                sentenza += ' where borrado==0'
+            if quitar_borrados:
+                sentenza += ' where estado!=1'
 
             for moeda in tqdm(cur.execute(sentenza).fetchall()):
                 paxina_web = r.get(get_url_moeda(moeda[3]))
 
                 if paxina_web.status_code == 404:
-                    cur.execute(f'update moeda set borrado=1, "data modificacion"="{datetime.now()}" where id="{moeda[0]}"')
+                    cur.execute(f'update moeda set estado=1, modificada="{datetime.now()}" where id="{moeda[0]}"')
                     num_mods += 1
                     continue
 
@@ -243,19 +243,34 @@ def manter(borrados:bool = False) -> None:
                 for ele in soup.find(class_='h1').children:
                     contidos.append(ele.text)
 
-                sentenza = f'update moeda set [simbolo][nome]borrado=0, "data modificacion"="{datetime.now()}" where id="{moeda[0]}"'
+                mod = False
+                sentenza = f'update moeda set [simbolo][nome][estado]modificada="{datetime.now()}" where id="{moeda[0]}"'
                 # simbolo
                 if contidos[1] != moeda[1]:
                     sentenza.replace('[simbolo]', contidos[1]+', ')
+                    mod = True
                 else:
                     sentenza.replace('[simbolo]', '')
 
                 # nome
                 if contidos[0] != moeda[2]:
-                    sentenza.replace('[nome]', contidos[0]+', ')
+                    sentenza = sentenza.replace('[nome]', contidos[0]+', ')
+                    mod = True
                 else:
-                    sentenza.replace('[nome]', '')
-                num_mods += 1
+                    sentenza = sentenza.replace('[nome]', '')
+
+                # untracked
+                if soup.find(class_='gPwpnS'):
+                    sentenza = sentenza.replace('[estado]', 'estado=2, ')
+                    mod = True
+                else:
+                    sentenza = sentenza.replace('[estado]', 'estado=0, ')
+
+                cur.execute(sentenza)
+
+                if mod:
+                    num_mods += 1
+
         except Exception as e:
             print(f'Erro: {e}')
             pass
@@ -270,6 +285,7 @@ def manter(borrados:bool = False) -> None:
         if DEBUG:
             print(f'Modificadas un total de {num_mods} entradas.')
             print_info_db()
+            print(datetime.now())
 
 def axuda():
     print('axuda\t-> Esta mensaxe')
