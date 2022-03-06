@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/03 21:05:26.106045
-#+ Editado:	2022/03/05 21:48:32.330924
+#+ Editado:	2022/03/06 10:49:52.323359
 # ------------------------------------------------------------------------------
 
 import sys
@@ -15,6 +15,7 @@ import sqlite3
 from sqlite3 import Cursor
 from secrets import token_urlsafe as tus
 from typing import Optional, Dict, Union
+from tqdm import tqdm
 
 from uteis.imprimir import jprint
 from conexions import Proxy
@@ -210,14 +211,16 @@ def scraping() -> None:
 
 def manter(borrados:bool = False) -> None:
     try:
-        r = Proxy(verbose= DEBUG, verbosalo= False)
+        r = Proxy(verbose= False, verbosalo= False)
         con = sqlite3.connect(DB)
         cur = con.cursor()
 
         # mostrar os datos iniciais
         if DEBUG:
             print(datetime.now())
+            info_db_ini = print_info_db()
 
+        num_mods = 0
         #
         # operacións
         #
@@ -226,11 +229,12 @@ def manter(borrados:bool = False) -> None:
             if not borrados:
                 sentenza += ' where borrado==0'
 
-            for moeda in cur.execute(sentenza).fetchall():
+            for moeda in tqdm(cur.execute(sentenza).fetchall()):
                 paxina_web = r.get(get_url_moeda(moeda[3]))
 
-                if pax_web.status_code == 404:
-                    cur.execute(f'update moeda set borrado=1 where id="{moeda[0]}"')
+                if paxina_web.status_code == 404:
+                    cur.execute(f'update moeda set borrado=1, "data modificacion"="{datetime.now()}" where id="{moeda[0]}"')
+                    num_mods += 1
                     continue
 
                 soup = bs(paxina_web.text, 'html.parser')
@@ -239,15 +243,21 @@ def manter(borrados:bool = False) -> None:
                 for ele in soup.find(class_='h1').children:
                     contidos.append(ele.text)
 
+                sentenza = f'update moeda set [simbolo][nome]borrado=0, "data modificacion"="{datetime.now()}" where id="{moeda[0]}"'
                 # simbolo
                 if contidos[1] != moeda[1]:
-                    pass
+                    sentenza.replace('[simbolo]', contidos[1]+', ')
+                else:
+                    sentenza.replace('[simbolo]', '')
 
                 # nome
                 if contidos[0] != moeda[2]:
-                    pass
-
-        except:
+                    sentenza.replace('[nome]', contidos[0]+', ')
+                else:
+                    sentenza.replace('[nome]', '')
+                num_mods += 1
+        except Exception as e:
+            print(f'Erro: {e}')
             pass
 
     except KeyboardInterrupt:
@@ -258,7 +268,7 @@ def manter(borrados:bool = False) -> None:
         con.close()
 
         if DEBUG:
-            print(f'Engadidas un total de {num_engadidos} entradas.')
+            print(f'Modificadas un total de {num_mods} entradas.')
             print_info_db()
 
 def axuda():
