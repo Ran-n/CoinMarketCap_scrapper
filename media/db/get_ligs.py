@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/03 21:05:26.106045
-#+ Editado:	2022/03/06 22:32:04.441178
+#+ Editado:	2022/03/07 19:16:41.985303
 # ------------------------------------------------------------------------------
 
 import sys
@@ -14,7 +14,7 @@ from datetime import datetime
 import sqlite3
 from sqlite3 import Cursor
 from secrets import token_urlsafe as tus
-from typing import Optional, Dict, Union
+from typing import List, Optional, Dict, Union
 from tqdm import tqdm
 
 from uteis.imprimir import jprint
@@ -52,7 +52,7 @@ def print_info_db() -> Dict[str, str]:
 
 # ------------------------------------------------------------------------------
 
-def scrape_auxiliar(cur: Cursor, paxina_web: str, info_db_ini: Dict[str, str], pax: Optional[Union[int, str]] = None) -> None:
+def scrape_auxiliar(cur: Cursor, paxina_web: str, info_db_ini: Dict[str, str], pax: Optional[Union[int, str]] = None, r: Proxy = None) -> None:
     global num_engadidos
     cant_engadidos = num_engadidos
 
@@ -71,6 +71,7 @@ def scrape_auxiliar(cur: Cursor, paxina_web: str, info_db_ini: Dict[str, str], p
                 simbolo = 'Erro'
         # simbolo #
 
+        """
         # nome
         try:
             nome = fila.find_all('td')[2].text
@@ -90,6 +91,18 @@ def scrape_auxiliar(cur: Cursor, paxina_web: str, info_db_ini: Dict[str, str], p
             if DEBUG: print(f'Erro en nome: {e}')
             nome = 'Erro'
         # nome #
+        """
+        # nome
+        try:
+            #nome = fila.find_all('span')[3].text
+            nome = fila.find(class_='circle').next_sibling.text
+        except:
+            try:
+                nome = fila.find(class_='iworPT').text
+            except Exception as e:
+                if DEBUG: print(f'Erro en nome: {e}')
+                simbolo = 'Erro'
+        # nome #
 
         # ligazon
         try:
@@ -102,6 +115,12 @@ def scrape_auxiliar(cur: Cursor, paxina_web: str, info_db_ini: Dict[str, str], p
         try:
             cur.execute('insert into moeda("simbolo", "nome", "ligazon", "creada")'\
                 f' values("{simbolo}", "{nome}", "{ligazon}", "{datetime.now()}")')
+            # para insertar o valor correcto de estado
+            manter_aux(
+                    moeda= (info_db_ini['cantidade']+num_engadidos, simbolo, nome, ligazon),
+                    cur= cur,
+                    r= r
+                    )
         except sqlite3.IntegrityError:
             pass
         except Exception as e:
@@ -141,7 +160,7 @@ def scrape(cur: Cursor, info_db_ini: Dict[str, str], auxiliar: str, r: Proxy) ->
         raise e
 
     if paxina_web.status_code != 404:
-        cant_engadidos = scrape_auxiliar(cur, paxina_web, info_db_ini, auxiliares[auxiliar][0])
+        cant_engadidos = scrape_auxiliar(cur, paxina_web, info_db_ini, auxiliares[auxiliar][0], r)
         if DEBUG and cant_engadidos == 0:
             print(f'Non se engadiu ningunha entrada da páxina {auxiliares[auxiliar][0]}.')
     else:
@@ -166,16 +185,58 @@ def scrape_inicio(cur: Cursor, info_db_ini: dict, r: Proxy) -> None:
             break
 
         try:
-            scrape_auxiliar(cur, paxina_web, info_db_ini, pax)
+            scrape_auxiliar(cur, paxina_web, info_db_ini, pax, r)
 
             pax+=1
 
         except Exception as e:
-            print(pax_web.text)
+            print(paxina_web.text)
             if DEBUG: print(f'Erro: {e}'); print(f'Escrapeadas un total de {pax} páxinas')
             break
 
     if DEBUG: print()
+
+def manter_aux(moeda: List[str], r: Proxy, cur: Cursor, num_mods: int = 0) -> int:
+    paxina_web = r.get(get_url_moeda(moeda[3]))
+
+    if paxina_web.status_code == 404:
+        cur.execute(f'update moeda set estado=1, modificada="{datetime.now()}" where id="{moeda[0]}"')
+        num_mods += 1
+    else:
+        mod = False
+        sentenza = f'update moeda set [simbolo][nome][estado]modificada="{datetime.now()}" where id="{moeda[0]}"'
+        soup = bs(paxina_web.text, 'html.parser')
+
+        contidos = []
+        for ele in soup.find(class_='h1').children:
+            contidos.append(ele.text)
+
+        # simbolo
+        if contidos[1] != moeda[1]:
+            sentenza = sentenza.replace('[simbolo]', 'simbolo="'+contidos[1]+'", ')
+            mod = True
+        else:
+            sentenza = sentenza.replace('[simbolo]', '')
+
+        # nome
+        if contidos[0] != moeda[2]:
+            sentenza = sentenza.replace('[nome]', 'nome="'+contidos[0]+'", ')
+            mod = True
+        else:
+            sentenza = sentenza.replace('[nome]', '')
+
+        # untracked
+        if soup.find(class_='gPwpnS'):
+            sentenza = sentenza.replace('[estado]', 'estado=2, ')
+            mod = True
+        else:
+            sentenza = sentenza.replace('[estado]', 'estado=0, ')
+
+        if mod:
+            num_mods += 1
+            cur.execute(sentenza)
+
+    return num_mods
 
 # ------------------------------------------------------------------------------
 
@@ -225,54 +286,20 @@ def manter(quitar_borrados:bool = False) -> None:
         # operacións
         #
         try:
-            sentenza = 'select * from moeda'
+            sentenza = 'select * from moeda'#'where creada > date("now")'
             if quitar_borrados:
                 sentenza += ' where estado!=1'
 
             for moeda in tqdm(cur.execute(sentenza).fetchall()):
-                paxina_web = r.get(get_url_moeda(moeda[3]))
-
-                if paxina_web.status_code == 404:
-                    cur.execute(f'update moeda set estado=1, modificada="{datetime.now()}" where id="{moeda[0]}"')
-                    num_mods += 1
-                    continue
-
-                soup = bs(paxina_web.text, 'html.parser')
-
-                contidos = []
-                for ele in soup.find(class_='h1').children:
-                    contidos.append(ele.text)
-
-                mod = False
-                sentenza = f'update moeda set [simbolo][nome][estado]modificada="{datetime.now()}" where id="{moeda[0]}"'
-                # simbolo
-                if contidos[1] != moeda[1]:
-                    sentenza = sentenza.replace('[simbolo]', contidos[1]+', ')
-                    mod = True
-                else:
-                    sentenza = sentenza.replace('[simbolo]', '')
-
-                # nome
-                if contidos[0] != moeda[2]:
-                    sentenza = sentenza.replace('[nome]', contidos[0]+', ')
-                    mod = True
-                else:
-                    sentenza = sentenza.replace('[nome]', '')
-
-                # untracked
-                if soup.find(class_='gPwpnS'):
-                    sentenza = sentenza.replace('[estado]', 'estado=2, ')
-                    mod = True
-                else:
-                    sentenza = sentenza.replace('[estado]', 'estado=0, ')
-
-                cur.execute(sentenza)
-
-                if mod:
-                    num_mods += 1
+                num_mods = manter_aux(
+                                moeda= moeda,
+                                r= r,
+                                cur= cur,
+                                num_mods= num_mods
+                            )
 
         except Exception as e:
-            print(f'Erro: {e}')
+            print(f'\nErro: {e}')
             pass
 
     except KeyboardInterrupt:
@@ -283,7 +310,7 @@ def manter(quitar_borrados:bool = False) -> None:
         con.close()
 
         if DEBUG:
-            print(f'Modificadas un total de {num_mods} entradas.')
+            print(f'\nModificadas un total de {num_mods} entradas.')
             print_info_db()
             print(datetime.now())
 
