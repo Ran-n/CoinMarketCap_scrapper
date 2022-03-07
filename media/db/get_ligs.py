@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/03 21:05:26.106045
-#+ Editado:	2022/03/07 19:16:41.985303
+#+ Editado:	2022/03/07 19:38:28.033938
 # ------------------------------------------------------------------------------
 
 import sys
@@ -314,7 +314,7 @@ def manter(quitar_borrados:bool = False) -> None:
             print_info_db()
             print(datetime.now())
 
-def axuda():
+def axuda() -> None:
     print('axuda\t-> Esta mensaxe')
     print('scrape\t-> Escrapeo')
     print('manter\t-> Tarefas de mantemento da DB')
