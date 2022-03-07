@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/03 21:05:26.106045
-#+ Editado:	2022/03/07 19:38:28.033938
+#+ Editado:	2022/03/07 19:39:35.221135
 # ------------------------------------------------------------------------------
 
 import sys
@@ -319,7 +319,7 @@ def axuda() -> None:
     print('scrape\t-> Escrapeo')
     print('manter\t-> Tarefas de mantemento da DB')
 
-def main(opcion: str = 'scrape') -> None:
+def main(opcion: str = 'scrape', modificadores: List[str] = None) -> None:
     dic_ops = {
             'axuda': axuda,
             'scrape': scraping,
