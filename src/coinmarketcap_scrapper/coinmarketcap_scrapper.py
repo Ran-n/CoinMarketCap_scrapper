@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/01 20:23:55.455964
-#+ Editado:	2022/03/02 12:01:20.664629
+#+ Editado:	2022/03/10 23:45:20.389917
 # ------------------------------------------------------------------------------
 from typing import Optional, List, Union, Tuple
 from bs4 import BeautifulSoup as bs
@@ -184,10 +184,11 @@ class CoinMarketCap:
             try:
                 pax_web = self.r.get(self.get_url_pax(pax))
 
-                if pax_web.status_code == 404:
+                soup = bs(pax_web.text, 'html.parser')
+
+                if (pax_web.status_code == 404) or (soup.find(class_='sc-404__StyledError-ic5ef7-0')):
                     raise ErroPaxinaInaccesibel
 
-                soup = bs(pax_web.text, 'html.parser')
                 taboa = soup.find('table').tbody.find_all('tr')
 
                 xpax = len(taboa)

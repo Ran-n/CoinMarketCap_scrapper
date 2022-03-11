@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/03 21:05:26.106045
-#+ Editado:	2022/03/07 19:42:22.409473
+#+ Editado:	2022/03/10 17:32:33.676084
 # ------------------------------------------------------------------------------
 
 import sys
@@ -57,6 +57,10 @@ def scrape_auxiliar(cur: Cursor, paxina_web: str, info_db_ini: Dict[str, str], p
     cant_engadidos = num_engadidos
 
     soup = bs(paxina_web.text, 'html.parser')
+
+    if soup.find(class_='sc-404__StyledError-ic5ef7-0'):
+        raise Exception
+
     taboa = soup.find('table').tbody.find_all('tr')
 
     for indice, fila in enumerate(taboa, 1):
@@ -188,9 +192,7 @@ def scrape_inicio(cur: Cursor, info_db_ini: dict, r: Proxy) -> None:
             scrape_auxiliar(cur, paxina_web, info_db_ini, pax, r)
 
             pax+=1
-
         except Exception as e:
-            print(paxina_web.text)
             if DEBUG: print(f'Erro: {e}'); print(f'Escrapeadas un total de {pax} páxinas')
             break
 
