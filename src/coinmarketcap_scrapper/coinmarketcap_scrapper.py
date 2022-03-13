@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/01 20:23:55.455964
-#+ Editado:	2022/03/10 23:45:20.389917
+#+ Editado:	2022/03/13 01:24:51.379948
 # ------------------------------------------------------------------------------
 from typing import Optional, List, Union, Tuple
 from bs4 import BeautifulSoup as bs
@@ -385,7 +385,7 @@ class CoinMarketCap:
         rango = datos[6].text
 
         # total value locked tvl
-        if len(datos) >= 48:
+        if 'Total Value Locked (TVL)' in soup.find('table').text:
             total_value_locked = self.__fora_extras(datos.pop(7).text)
         else:
             total_value_locked = CHAR_NULL
