@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/01 20:23:55.455964
-#+ Editado:	2022/03/13 01:24:51.379948
+#+ Editado:	2022/03/13 12:23:19.821717
 # ------------------------------------------------------------------------------
 from typing import Optional, List, Union, Tuple
 from bs4 import BeautifulSoup as bs
@@ -346,186 +346,195 @@ class CoinMarketCap:
 
         soup = bs(pax_web.text, 'html.parser')
 
-        datos = []
-        for taboa in soup.find_all('table'):
-            for ele in taboa.find_all('td'):
-                datos.append(ele)
-
-        # scraping
-        # divisa_ref
-        divisa_ref = datos[0].text[0]
-        # prezo
-        prezo = self.__fora_extras(datos[0].text, divisa_ref)
-        # price_change
-        try:
-            prime, secon, terce = datos[1].find_all('span')
-            price_change_24h = self.__fora_extras(prime.text, divisa_ref)
-            price_change_pctx_24h = self.__mais_menos(terce)+secon.text
-        except:
-            price_change_24h = CHAR_NULL
-            price_change_pctx_24h = CHAR_NULL
-        # min/max 24h
-        if datos[2].text != 'No Data':
-            max_24h, min_24h = [ele.rstrip() for ele in self.__fora_extras(datos[2].text, divisa_ref).split('/')]
-        else:
-            max_24h = min_24h = CHAR_NULL
-        # trading volume 24h
-        try:
-            prime, secon, terce = datos[3].find_all('span')
-            trading_volume_24h = self.__fora_extras(prime.text, divisa_ref)
-            trading_volume_change_pctx_24h = self.__mais_menos(terce)+secon.text
-        except:
-            trading_volume_24h = CHAR_NULL
-            trading_volume_change_pctx_24h = CHAR_NULL
-        # volume / market cap
-        volume_dividido_market_cap = datos[4].text
-        # dominancia mercado
-        dominancia_mercado = datos[5].text
-        # rango
-        rango = datos[6].text
-
-        # total value locked tvl
-        if 'Total Value Locked (TVL)' in soup.find('table').text:
-            total_value_locked = self.__fora_extras(datos.pop(7).text)
-        else:
-            total_value_locked = CHAR_NULL
-
-        # market cap
-        try:
-            prime, secon, terce = datos[7].find_all('span')
-            market_cap = self.__fora_extras(prime.text, divisa_ref)
-            market_cap_change_pctx = self.__mais_menos(terce)+secon.text
-        except:
-            market_cap = CHAR_NULL
-            market_cap_change_pctx = CHAR_NULL
-        # fully diluted market cap
-        try:
-            prime, secon, terce = datos[8].find_all('span')
-            fully_diluted_market_cap = self.__fora_extras(prime.text, divisa_ref)
-            fully_diluted_market_cap_change_pctx = self.__mais_menos(terce)+secon.text
-        except:
-            fully_diluted_market_cap = CHAR_NULL
-            fully_diluted_market_cap_change_pctx = CHAR_NULL
-        # min/max onte
-        if datos[9].text != 'No Data':
-            max_onte, min_onte = [ele.rstrip() for ele in self.__fora_extras(datos[9].text, divisa_ref).split('/')]
-        else:
-            max_onte = min_onte = CHAR_NULL
-        # open/close onte
-        if datos[10].text != 'No Data':
-            onte_ini, onte_fin = [ele.rstrip() for ele in self.__fora_extras(datos[10].text, divisa_ref).split('/')]
-        else:
-            onte_ini = onte_fin = CHAR_NULL
-        # cambio onte
-        price_change_pctx_onte = datos[11].text
-        if 'red' in str(datos[11]):
-            price_change_pctx_onte = '+'+price_change_pctx_onte
-        else:
-            price_change_pctx_onte = '-'+price_change_pctx_onte
-        # volume onte
-        volume_onte = self.__fora_extras(datos[12].text, divisa_ref)
-        # min/max 7d
-        if datos[13].text != 'No Data':
-            min_7d, max_7d = [ele.rstrip() for ele in self.__fora_extras(datos[13].text, divisa_ref).split('/')]
-        else:
-            min_7d = max_7d = CHAR_NULL
-        # min/max 30d
-        if datos[14].text != 'No Data':
-            min_30d, max_30d = [ele.rstrip() for ele in self.__fora_extras(datos[14].text, divisa_ref).split('/')]
-        else:
-            min_30d = max_30d = CHAR_NULL
-        # min/max 90d
-        if datos[15].text != 'No Data':
-            min_90d, max_90d = [ele.rstrip() for ele in self.__fora_extras(datos[15].text, divisa_ref).split('/')]
-        else:
-            min_90d = max_90d = CHAR_NULL
-        # min/max 52semanas
-        if datos[16].text != 'No Data':
-            min_52semanas, max_52semanas = [ele.rstrip() for ele in self.__fora_extras(datos[16].text, divisa_ref).split('/')]
-        else:
-            min_52semanas = max_52semanas = CHAR_NULL
-        # all time high
-        try:
-            prime, secon, terce = datos[17].find_all('span')
-            ath = self.__fora_extras(prime.text, divisa_ref)
-            ath_change_pctx = self.__mais_menos(terce)+secon.text
-        except:
-            ath = CHAR_NULL
-            ath_change_pctx = CHAR_NULL
-        # all time low
-        try:
-            prime, secon, terce = datos[18].find_all('span')
-            atl = self.__fora_extras(prime.text, divisa_ref)
-            atl_change_pctx = self.__mais_menos(terce)+secon.text
-        except:
-            atl = CHAR_NULL
-            atl_change_pctx = CHAR_NULL
-        # roi da moeda (comprado no momento da saída ou no primeiro momento rexistrado)
-        roi = datos[19].text
-        if roi != 'No Data':
-            if 'green' in str(datos[19]):
-                roi = '+'+roi
-            else:
-                roi = '-'+roi
-        # circulating supply
-        circulating_supply = datos[20].text
-        if circulating_supply != 'No Data':
-            circulating_supply = self.__fora_extras(circulating_supply.split(' ')[0])
-        # total supply
-        total_supply = datos[21].text
-        if total_supply != 'No Data':
-            total_supply = self.__fora_extras(total_supply.split(' ')[0])
-        # max supply
-        max_supply = datos[22].text
-        if max_supply != 'No Data':
-            max_supply = self.__fora_extras(max_supply.split(' ')[0])
-
+        # watchlists
         watchlists = self.__fora_extras(soup.find_all(class_='namePill')[2].text.split(' ')[1])
 
-        dic = {
-                'timestamp': str(datetime.now()),
-                'rango': rango,
-                'simbolo': obx_buscado[0],
-                'nome': obx_buscado[1],
-                'prezo': prezo,
-                'divisa_ref': divisa_ref,
-                'price_change_24h': price_change_24h,
-                'price_change_pctx_24h': price_change_pctx_24h,
-                'max_24h': max_24h,
-                'min_24h': min_24h,
-                'trading_volume_24h': trading_volume_24h,
-                'trading_volume_change_pctx_24h': trading_volume_change_pctx_24h,
-                'volume_dividido_market_cap': volume_dividido_market_cap,
-                'dominancia_mercado': dominancia_mercado,
-                'market_cap': market_cap,
-                'market_cap_change_pctx': market_cap_change_pctx,
-                'fully_diluted_market_cap': fully_diluted_market_cap,
-                'fully_diluted_market_cap_change_pctx': fully_diluted_market_cap_change_pctx,
-                'max_onte': max_onte,
-                'min_onte': min_onte,
-                'onte_ini': onte_ini,
-                'onte_fin': onte_fin,
-                'price_change_pctx_onte': price_change_pctx_onte,
-                'volume_onte': volume_onte,
-                'max_7d': max_7d,
-                'min_7d': min_7d,
-                'max_30d': max_30d,
-                'min_30d': min_30d,
-                'max_90d': max_90d,
-                'min_90d': min_90d,
-                'max_52semanas': max_52semanas,
-                'min_52semanas': min_52semanas,
-                'ath': ath,
-                'ath_change_pctx': ath_change_pctx,
-                'atl': atl,
-                'atl_change_pctx': atl_change_pctx,
-                'roi': roi,
-                'circulating_supply': circulating_supply,
-                'total_supply': total_supply,
-                'max_supply': max_supply,
-                'total_value_locked': total_value_locked,
-                'watchlists': watchlists
-                }
+        # untracked
+        if not soup.find(class_='gPwpnS'):
+            datos = []
+            for taboa in soup.find_all('table'):
+                for ele in taboa.find_all('td'):
+                    datos.append(ele)
+
+            # scraping
+            # divisa_ref
+            divisa_ref = datos[0].text[0]
+            # prezo
+            prezo = self.__fora_extras(datos[0].text, divisa_ref)
+            # price_change
+            try:
+                prime, secon, terce = datos[1].find_all('span')
+                price_change_24h = self.__fora_extras(prime.text, divisa_ref)
+                price_change_pctx_24h = self.__mais_menos(terce)+secon.text
+            except:
+                price_change_24h = CHAR_NULL
+                price_change_pctx_24h = CHAR_NULL
+            # min/max 24h
+            if datos[2].text != 'No Data':
+                max_24h, min_24h = [ele.rstrip() for ele in self.__fora_extras(datos[2].text, divisa_ref).split('/')]
+            else:
+                max_24h = min_24h = CHAR_NULL
+            # trading volume 24h
+            try:
+                prime, secon, terce = datos[3].find_all('span')
+                trading_volume_24h = self.__fora_extras(prime.text, divisa_ref)
+                trading_volume_change_pctx_24h = self.__mais_menos(terce)+secon.text
+            except:
+                trading_volume_24h = CHAR_NULL
+                trading_volume_change_pctx_24h = CHAR_NULL
+            # volume / market cap
+            volume_dividido_market_cap = datos[4].text
+            # dominancia mercado
+            dominancia_mercado = datos[5].text
+            # rango
+            rango = datos[6].text
+            # total value locked tvl
+            if 'Total Value Locked (TVL)' in soup.find('table').text:
+                total_value_locked = self.__fora_extras(datos.pop(7).text)
+            else:
+                total_value_locked = CHAR_NULL
+            # market cap
+            try:
+                prime, secon, terce = datos[7].find_all('span')
+                market_cap = self.__fora_extras(prime.text, divisa_ref)
+                market_cap_change_pctx = self.__mais_menos(terce)+secon.text
+            except:
+                market_cap = CHAR_NULL
+                market_cap_change_pctx = CHAR_NULL
+            # fully diluted market cap
+            try:
+                prime, secon, terce = datos[8].find_all('span')
+                fully_diluted_market_cap = self.__fora_extras(prime.text, divisa_ref)
+                fully_diluted_market_cap_change_pctx = self.__mais_menos(terce)+secon.text
+            except:
+                fully_diluted_market_cap = CHAR_NULL
+                fully_diluted_market_cap_change_pctx = CHAR_NULL
+            # min/max onte
+            if datos[9].text != 'No Data':
+                max_onte, min_onte = [ele.rstrip() for ele in self.__fora_extras(datos[9].text, divisa_ref).split('/')]
+            else:
+                max_onte = min_onte = CHAR_NULL
+            # open/close onte
+            if datos[10].text != 'No Data':
+                onte_ini, onte_fin = [ele.rstrip() for ele in self.__fora_extras(datos[10].text, divisa_ref).split('/')]
+            else:
+                onte_ini = onte_fin = CHAR_NULL
+            # cambio onte
+            price_change_pctx_onte = datos[11].text
+            if 'red' in str(datos[11]):
+                price_change_pctx_onte = '+'+price_change_pctx_onte
+            else:
+                price_change_pctx_onte = '-'+price_change_pctx_onte
+            # volume onte
+            volume_onte = self.__fora_extras(datos[12].text, divisa_ref)
+            # min/max 7d
+            if datos[13].text != 'No Data':
+                min_7d, max_7d = [ele.rstrip() for ele in self.__fora_extras(datos[13].text, divisa_ref).split('/')]
+            else:
+                min_7d = max_7d = CHAR_NULL
+            # min/max 30d
+            if datos[14].text != 'No Data':
+                min_30d, max_30d = [ele.rstrip() for ele in self.__fora_extras(datos[14].text, divisa_ref).split('/')]
+            else:
+                min_30d = max_30d = CHAR_NULL
+            # min/max 90d
+            if datos[15].text != 'No Data':
+                min_90d, max_90d = [ele.rstrip() for ele in self.__fora_extras(datos[15].text, divisa_ref).split('/')]
+            else:
+                min_90d = max_90d = CHAR_NULL
+            # min/max 52semanas
+            if datos[16].text != 'No Data':
+                min_52semanas, max_52semanas = [ele.rstrip() for ele in self.__fora_extras(datos[16].text, divisa_ref).split('/')]
+            else:
+                min_52semanas = max_52semanas = CHAR_NULL
+            # all time high
+            try:
+                prime, secon, terce = datos[17].find_all('span')
+                ath = self.__fora_extras(prime.text, divisa_ref)
+                ath_change_pctx = self.__mais_menos(terce)+secon.text
+            except:
+                ath = CHAR_NULL
+                ath_change_pctx = CHAR_NULL
+            # all time low
+            try:
+                prime, secon, terce = datos[18].find_all('span')
+                atl = self.__fora_extras(prime.text, divisa_ref)
+                atl_change_pctx = self.__mais_menos(terce)+secon.text
+            except:
+                atl = CHAR_NULL
+                atl_change_pctx = CHAR_NULL
+            # roi da moeda (comprado no momento da saída ou no primeiro momento rexistrado)
+            roi = datos[19].text
+            if roi != 'No Data':
+                if 'green' in str(datos[19]):
+                    roi = '+'+roi
+                else:
+                    roi = '-'+roi
+            # circulating supply
+            circulating_supply = datos[20].text
+            if circulating_supply != 'No Data':
+                circulating_supply = self.__fora_extras(circulating_supply.split(' ')[0])
+            # total supply
+            total_supply = datos[21].text
+            if total_supply != 'No Data':
+                total_supply = self.__fora_extras(total_supply.split(' ')[0])
+            # max supply
+            max_supply = datos[22].text
+            if max_supply != 'No Data':
+                max_supply = self.__fora_extras(max_supply.split(' ')[0])
+
+
+            dic = {
+                    'timestamp': str(datetime.now()),
+                    'rango': rango,
+                    'simbolo': obx_buscado[0],
+                    'nome': obx_buscado[1],
+                    'prezo': prezo,
+                    'divisa_ref': divisa_ref,
+                    'price_change_24h': price_change_24h,
+                    'price_change_pctx_24h': price_change_pctx_24h,
+                    'max_24h': max_24h,
+                    'min_24h': min_24h,
+                    'trading_volume_24h': trading_volume_24h,
+                    'trading_volume_change_pctx_24h': trading_volume_change_pctx_24h,
+                    'volume_dividido_market_cap': volume_dividido_market_cap,
+                    'dominancia_mercado': dominancia_mercado,
+                    'market_cap': market_cap,
+                    'market_cap_change_pctx': market_cap_change_pctx,
+                    'fully_diluted_market_cap': fully_diluted_market_cap,
+                    'fully_diluted_market_cap_change_pctx': fully_diluted_market_cap_change_pctx,
+                    'max_onte': max_onte,
+                    'min_onte': min_onte,
+                    'onte_ini': onte_ini,
+                    'onte_fin': onte_fin,
+                    'price_change_pctx_onte': price_change_pctx_onte,
+                    'volume_onte': volume_onte,
+                    'max_7d': max_7d,
+                    'min_7d': min_7d,
+                    'max_30d': max_30d,
+                    'min_30d': min_30d,
+                    'max_90d': max_90d,
+                    'min_90d': min_90d,
+                    'max_52semanas': max_52semanas,
+                    'min_52semanas': min_52semanas,
+                    'ath': ath,
+                    'ath_change_pctx': ath_change_pctx,
+                    'atl': atl,
+                    'atl_change_pctx': atl_change_pctx,
+                    'roi': roi,
+                    'circulating_supply': circulating_supply,
+                    'total_supply': total_supply,
+                    'max_supply': max_supply,
+                    'total_value_locked': total_value_locked,
+                    'watchlists': watchlists
+                    }
+        else:
+            dic = {
+                    'timestamp': str(datetime.now()),
+                    'simbolo': obx_buscado[0],
+                    'nome': obx_buscado[1],
+                    'watchlists': watchlists
+                    }
 
         for chave, valor in zip(dic.keys(), dic.values()):
             if (valor == '- -') or (valor == '') or (valor == '--') or (valor == 'No Data'):
