@@ -3,11 +3,12 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/03 21:05:26.106045
-#+ Editado:	2022/03/13 13:38:36.589447
+#+ Editado:	2022/03/14 07:47:30.447618
 # ------------------------------------------------------------------------------
 
 import sys
 #import requests as r
+from bs4 import BeautifulSoup
 from bs4 import BeautifulSoup as bs
 from bs4.element import ResultSet
 from datetime import datetime
@@ -52,11 +53,9 @@ def print_info_db() -> Dict[str, str]:
 
 # ------------------------------------------------------------------------------
 
-def scrape_auxiliar(cur: Cursor, paxina_web: str, info_db_ini: Dict[str, str], pax: Optional[Union[int, str]] = None, r: Proxy = None) -> None:
+def scrape_auxiliar(cur: Cursor, soup: BeautifulSoup, info_db_ini: Dict[str, str], pax: Optional[Union[int, str]] = None, r: Proxy = None) -> None:
     global num_engadidos
     cant_engadidos = num_engadidos
-
-    soup = bs(paxina_web.text, 'html.parser')
 
     if soup.find(class_='sc-404__StyledError-ic5ef7-0'):
         raise Exception
@@ -164,7 +163,7 @@ def scrape(cur: Cursor, info_db_ini: Dict[str, str], auxiliar: str, r: Proxy) ->
         raise e
 
     if paxina_web.status_code != 404:
-        cant_engadidos = scrape_auxiliar(cur, paxina_web, info_db_ini, auxiliares[auxiliar][0], r)
+        cant_engadidos = scrape_auxiliar(cur, bs(paxina_web.text, 'html.parser'), info_db_ini, auxiliares[auxiliar][0], r)
         if DEBUG and cant_engadidos == 0:
             print(f'Non se engadiu ningunha entrada da páxina {auxiliares[auxiliar][0]}.')
     else:
@@ -173,9 +172,32 @@ def scrape(cur: Cursor, info_db_ini: Dict[str, str], auxiliar: str, r: Proxy) ->
     if DEBUG: print()
 
 def scrape_inicio(cur: Cursor, info_db_ini: dict, r: Proxy) -> None:
+    r.set_verbose(False)
+
+    paxina_web = r.get(get_url(1))
+    soup = bs(paxina_web.text, 'html.parser')
+
+    pax_totais = int(soup.find_all(class_="page")[-1].text)
+
+    with tqdm(total= pax_totais, desc= 'Páxina Principal', unit=' paxina') as pbar:
+        for pax in range(1, pax_totais+1):
+            try:
+                if pax != 1:
+                    paxina_web = r.get(get_url(pax))
+                    soup = bs(paxina_web.text, 'html.parser')
+                scrape_auxiliar(cur, soup, info_db_ini, pax, r)
+                pbar.update(1)
+            except Exception as e:
+                if DEBUG: print(f'Erro: {e}')
+
+    r.set_verbose(True)
+
+"""
+def scrape_inicio(cur: Cursor, info_db_ini: dict, r: Proxy) -> None:
     pax = 1
 
     if DEBUG: print(f'{datetime.now()}\n* Páxina principal')
+
     while True:
         if DEBUG:
             print(f'{datetime.now()} | Escrapeando a páxina {pax} coa IP {r.get_proxy().ip}')
@@ -189,7 +211,7 @@ def scrape_inicio(cur: Cursor, info_db_ini: dict, r: Proxy) -> None:
             break
 
         try:
-            scrape_auxiliar(cur, paxina_web, info_db_ini, pax, r)
+            scrape_auxiliar(cur, bs(paxina_web.text, 'html.parser'), info_db_ini, pax, r)
 
             pax+=1
         except Exception as e:
@@ -197,6 +219,7 @@ def scrape_inicio(cur: Cursor, info_db_ini: dict, r: Proxy) -> None:
             break
 
     if DEBUG: print()
+"""
 
 def manter_aux(moeda: List[str], r: Proxy, cur: Cursor, num_mods: int = 0) -> int:
     paxina_web = r.get(get_url_moeda(moeda[3]))
@@ -251,7 +274,7 @@ def scraping() -> None:
         # mostrar os datos iniciais
         if DEBUG:
             print(datetime.now())
-            info_db_ini = print_info_db()
+        info_db_ini = print_info_db()
 
         scrape(cur, info_db_ini, 'gan_per', r)
         scrape(cur, info_db_ini, 'trending', r)
