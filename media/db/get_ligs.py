@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/03 21:05:26.106045
-#+ Editado:	2022/03/14 07:47:30.447618
+#+ Editado:	2022/03/15 17:49:04.292529
 # ------------------------------------------------------------------------------
 
 import sys
@@ -191,6 +191,7 @@ def scrape_inicio(cur: Cursor, info_db_ini: dict, r: Proxy) -> None:
                 if DEBUG: print(f'Erro: {e}')
 
     r.set_verbose(True)
+    if DEBUG: print()
 
 """
 def scrape_inicio(cur: Cursor, info_db_ini: dict, r: Proxy) -> None:
