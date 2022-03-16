@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/03 21:05:26.106045
-#+ Editado:	2022/03/15 17:49:04.292529
+#+ Editado:	2022/03/16 19:20:42.019839
 # ------------------------------------------------------------------------------
 
 import sys
@@ -144,7 +144,6 @@ def scrape_auxiliar(cur: Cursor, soup: BeautifulSoup, info_db_ini: Dict[str, str
 
     return num_engadidos-cant_engadidos
 
-
 def scrape(cur: Cursor, info_db_ini: Dict[str, str], auxiliar: str, r: Proxy) -> None:
 
     auxiliares = {
@@ -185,42 +184,13 @@ def scrape_inicio(cur: Cursor, info_db_ini: dict, r: Proxy) -> None:
                 if pax != 1:
                     paxina_web = r.get(get_url(pax))
                     soup = bs(paxina_web.text, 'html.parser')
-                scrape_auxiliar(cur, soup, info_db_ini, pax, r)
                 pbar.update(1)
+                scrape_auxiliar(cur, soup, info_db_ini, pax, r)
             except Exception as e:
                 if DEBUG: print(f'Erro: {e}')
 
     r.set_verbose(True)
     if DEBUG: print()
-
-"""
-def scrape_inicio(cur: Cursor, info_db_ini: dict, r: Proxy) -> None:
-    pax = 1
-
-    if DEBUG: print(f'{datetime.now()}\n* Páxina principal')
-
-    while True:
-        if DEBUG:
-            print(f'{datetime.now()} | Escrapeando a páxina {pax} coa IP {r.get_proxy().ip}')
-        #if DEBUG: print(f'Escrapeando a páxina {pax} coa IP {r.get_ip().text.rstrip()}', end='\r')
-        paxina_web = r.get(get_url(pax))
-
-        if paxina_web.status_code == 404:
-            if DEBUG:
-                print('Máximo de páxinas alcanzado.')
-                print(f'Escrapeadas un total de {pax-1} páxinas.')
-            break
-
-        try:
-            scrape_auxiliar(cur, bs(paxina_web.text, 'html.parser'), info_db_ini, pax, r)
-
-            pax+=1
-        except Exception as e:
-            if DEBUG: print(f'Erro: {e}'); print(f'Escrapeadas un total de {pax} páxinas')
-            break
-
-    if DEBUG: print()
-"""
 
 def manter_aux(moeda: List[str], r: Proxy, cur: Cursor, num_mods: int = 0) -> int:
     paxina_web = r.get(get_url_moeda(moeda[3]))
