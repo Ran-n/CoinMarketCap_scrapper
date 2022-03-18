@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/01 20:23:55.455964
-#+ Editado:	2022/03/13 12:23:19.821717
+#+ Editado:	2022/03/18 16:48:49.351955
 # ------------------------------------------------------------------------------
 from typing import Optional, List, Union, Tuple
 from bs4 import BeautifulSoup as bs
@@ -13,6 +13,7 @@ from datetime import datetime
 import sqlite3
 import sys
 import os
+import json
 
 from conexions import Proxy
 
@@ -31,8 +32,8 @@ class CoinMarketCap:
     # Constructor --------------------------------------------------------------
     def __init__(self, verbose: bool = False, timeout: int = 10, reintentos: int = 5) -> None:
         # variables da instancia
-        self.__pax = self.__pax
-        self.__url = self.__url
+        #self.__pax = self.__pax
+        #self.__url = self.__url
 
         self.r = Proxy(verbose= verbose)
         self.r.set_timeout(timeout)
@@ -291,7 +292,6 @@ class CoinMarketCap:
             return texto.replace(',','').replace(divisa_ref,'')
         return texto.replace(',','')
 
-    # xFCRF devolve soamente usd, molaría para o futuro implementar outras
     # get_moeda
     def get_moeda(self, buscado: str, xvalor: Optional[str] = 'nome', reintentos: int = 0) -> dict:
         """

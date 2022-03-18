@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/03 21:05:26.106045
-#+ Editado:	2022/03/16 19:20:42.019839
+#+ Editado:	2022/03/19 00:06:34.714750
 # ------------------------------------------------------------------------------
 
 import sys
@@ -17,6 +17,7 @@ from sqlite3 import Cursor
 from secrets import token_urlsafe as tus
 from typing import List, Optional, Dict, Union
 from tqdm import tqdm
+from coinmarketcap_scrapi import CoinMarketCap
 
 from uteis.imprimir import jprint
 from conexions import Proxy
@@ -52,6 +53,35 @@ def print_info_db() -> Dict[str, str]:
     return info
 
 # ------------------------------------------------------------------------------
+
+def check_monero_db(cur: Cursor, info_db_ini: dict, r: Proxy, simbolo: str, nome: str, ligazon: str) -> int:
+    global num_engadidos
+    cant_engadidos = num_engadidos
+
+    try:
+        cur.execute('insert into moeda("simbolo", "nome", "ligazon", "creada")'\
+            f' values("{simbolo}", "{nome}", "{ligazon}", "{datetime.now()}")')
+        # para insertar o valor correcto de estado
+        manter_aux(
+                moeda= (info_db_ini['cantidade']+num_engadidos, simbolo, nome, ligazon),
+                cur= cur,
+                r= r
+                )
+    except sqlite3.IntegrityError:
+        pass
+    except Exception as e:
+        raise e
+    else:
+        if DEBUG:
+            num_engadidos += 1
+            jprint({
+                'id': info_db_ini['cantidade']+num_engadidos,
+                'simbolo': simbolo,
+                'nome': nome,
+                'ligazon': ligazon
+                })
+
+    #return num_engadidos-cant_engadidos
 
 def scrape_auxiliar(cur: Cursor, soup: BeautifulSoup, info_db_ini: Dict[str, str], pax: Optional[Union[int, str]] = None, r: Proxy = None) -> None:
     global num_engadidos
@@ -109,7 +139,7 @@ def scrape_auxiliar(cur: Cursor, soup: BeautifulSoup, info_db_ini: Dict[str, str
 
         # ligazon
         try:
-            ligazon = fila.find(class_='cmc-link').get('href')
+            ligazon = fila.find(class_='cmc-link').get('href').split('/')[-2]
         except Exception as e:
             if DEBUG: print(f'Erro en ligazon: {e}')
             ligazon = 'Erro'
@@ -190,7 +220,6 @@ def scrape_inicio(cur: Cursor, info_db_ini: dict, r: Proxy) -> None:
                 if DEBUG: print(f'Erro: {e}')
 
     r.set_verbose(True)
-    if DEBUG: print()
 
 def manter_aux(moeda: List[str], r: Proxy, cur: Cursor, num_mods: int = 0) -> int:
     paxina_web = r.get(get_url_moeda(moeda[3]))
@@ -236,6 +265,31 @@ def manter_aux(moeda: List[str], r: Proxy, cur: Cursor, num_mods: int = 0) -> in
 
 # ------------------------------------------------------------------------------
 
+def scrapi_inicio(cur: Cursor, info_db_ini: dict, r: Proxy) -> None:
+
+    cmc = CoinMarketCap(r= r)
+
+    cmc.set_verbose(False)
+    cmc.set_timeout(5)
+    cmc.set_reintentos(1)
+
+    datos = cmc.crudo()['data']
+
+    cant_moneroj = datos['totalCount']
+    moneroj = datos['cryptoCurrencyList']
+
+    for monero in tqdm(moneroj, desc='Páxina Principal', unit=' monero'):
+        check_monero_db(
+            cur= cur,
+            info_db_ini= info_db_ini,
+            r= r,
+            nome= monero['symbol'],
+            simbolo= monero['name'],
+            ligazon= monero['slug']
+        )
+
+# ------------------------------------------------------------------------------
+
 def scraping() -> None:
     try:
         r = Proxy(verbose= DEBUG, verbosalo= False)
@@ -247,12 +301,15 @@ def scraping() -> None:
             print(datetime.now())
         info_db_ini = print_info_db()
 
+        """
         scrape(cur, info_db_ini, 'gan_per', r)
         scrape(cur, info_db_ini, 'trending', r)
         scrape(cur, info_db_ini, '+visit', r)
         scrape(cur, info_db_ini, 'novos', r)
+        """
 
         scrape_inicio(cur, info_db_ini, r)
+        #scrapi_inicio(cur, info_db_ini, r)
 
     except KeyboardInterrupt:
         print('\n\nPechando o programa')
@@ -262,7 +319,7 @@ def scraping() -> None:
         con.close()
 
         if DEBUG:
-            print(f'Engadidas un total de {num_engadidos} entradas.')
+            print(f'\nEngadidas un total de {num_engadidos} entradas.')
             print_info_db()
             print(datetime.now())
 
