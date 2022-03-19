@@ -19,4 +19,6 @@ WW2RheTNrq8goAi42Dz5AKUj1qLSaTSSgiH7sHR2qRqojg238EXP3MM3xuUgswriET7UrpkEoYaCkecB
 - [X] Arranxar o erro ó scrapear unha páxina dunha moeda con valor de TVL na táboa de datos.
 - [X] Arranxar o erro ó scrapear unha páxina dunha moeda de estado "Market data is untracked".
 - [ ] Modificar ligazón por slug.
+- [ ] Crear táboa de estado.
+- [ ] Modificar nome da táboa.
 - [ ] Facer o get\_top máis rápido.

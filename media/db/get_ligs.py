@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/03 21:05:26.106045
-#+ Editado:	2022/03/19 00:06:34.714750
+#+ Editado:	2022/03/19 15:39:52.071772
 # ------------------------------------------------------------------------------
 
 import sys
@@ -18,6 +18,7 @@ from secrets import token_urlsafe as tus
 from typing import List, Optional, Dict, Union
 from tqdm import tqdm
 from coinmarketcap_scrapi import CoinMarketCap
+import logging
 
 from uteis.imprimir import jprint
 from conexions import Proxy
@@ -62,24 +63,28 @@ def check_monero_db(cur: Cursor, info_db_ini: dict, r: Proxy, simbolo: str, nome
         cur.execute('insert into moeda("simbolo", "nome", "ligazon", "creada")'\
             f' values("{simbolo}", "{nome}", "{ligazon}", "{datetime.now()}")')
         # para insertar o valor correcto de estado
+        """
         manter_aux(
                 moeda= (info_db_ini['cantidade']+num_engadidos, simbolo, nome, ligazon),
                 cur= cur,
                 r= r
                 )
+        """
     except sqlite3.IntegrityError:
         pass
     except Exception as e:
+        logging.error(f'{e}')
         raise e
     else:
         if DEBUG:
             num_engadidos += 1
-            jprint({
+            monero = {
                 'id': info_db_ini['cantidade']+num_engadidos,
                 'simbolo': simbolo,
                 'nome': nome,
                 'ligazon': ligazon
-                })
+                }
+            logging.info(f'Engadido:\n{monero}\n')
 
     #return num_engadidos-cant_engadidos
 
@@ -185,18 +190,23 @@ def scrape(cur: Cursor, info_db_ini: Dict[str, str], auxiliar: str, r: Proxy) ->
 
     try:
         if DEBUG: print(f'{datetime.now()}\n* Páxina de {auxiliares[auxiliar][0]}')
+        logging.info(f'Scrape da páxina de {auxiliares[auxiliar][0]}')
         paxina_web = r.get(auxiliares[auxiliar][1])
     except KeyError:
+        logging.error('Páxina inexistente')
         raise Exception('Páxina inexistente.')
     except Exception as e:
+        logging.error(f'{e}')
         raise e
 
     if paxina_web.status_code != 404:
         cant_engadidos = scrape_auxiliar(cur, bs(paxina_web.text, 'html.parser'), info_db_ini, auxiliares[auxiliar][0], r)
         if DEBUG and cant_engadidos == 0:
             print(f'Non se engadiu ningunha entrada da páxina {auxiliares[auxiliar][0]}.')
+            logging.info(f'Non se engadiu ningunha entrada da páxina {auxiliares[auxiliar][0]}.')
     else:
         if DEBUG: print('Páxina inaccesíbel.')
+        logging.info('Páxina de {auxiliares[auxiliar][0]} inaccesíbel.')
 
     if DEBUG: print()
 
@@ -291,25 +301,30 @@ def scrapi_inicio(cur: Cursor, info_db_ini: dict, r: Proxy) -> None:
 # ------------------------------------------------------------------------------
 
 def scraping() -> None:
+    logging.basicConfig(
+            filename= '.log',
+            filemode='w',
+            format='%(asctime)s - %(levelname)s - %(message)s',
+            level=logging.INFO
+    )
+
     try:
         r = Proxy(verbose= DEBUG, verbosalo= False)
         con = sqlite3.connect(DB)
         cur = con.cursor()
 
         # mostrar os datos iniciais
-        if DEBUG:
-            print(datetime.now())
+        print(datetime.now())
         info_db_ini = print_info_db()
+        logging.info(info_db_ini)
 
-        """
         scrape(cur, info_db_ini, 'gan_per', r)
         scrape(cur, info_db_ini, 'trending', r)
         scrape(cur, info_db_ini, '+visit', r)
         scrape(cur, info_db_ini, 'novos', r)
-        """
 
-        scrape_inicio(cur, info_db_ini, r)
-        #scrapi_inicio(cur, info_db_ini, r)
+        #scrape_inicio(cur, info_db_ini, r)
+        scrapi_inicio(cur, info_db_ini, r)
 
     except KeyboardInterrupt:
         print('\n\nPechando o programa')
@@ -318,10 +333,13 @@ def scraping() -> None:
         con.commit()
         con.close()
 
-        if DEBUG:
-            print(f'\nEngadidas un total de {num_engadidos} entradas.')
-            print_info_db()
-            print(datetime.now())
+        catex_info_engadidas = f'Engadidas un total de {num_engadidos} entradas.'
+        print('\n'+catex_info_engadidas)
+        logging.info(catex_info_engadidas)
+
+        info_db_fin = print_info_db()
+        logging.info(info_db_fin)
+        print(datetime.now())
 
 def manter(quitar_borrados:bool = False) -> None:
     try:
@@ -330,9 +348,8 @@ def manter(quitar_borrados:bool = False) -> None:
         cur = con.cursor()
 
         # mostrar os datos iniciais
-        if DEBUG:
-            print(datetime.now())
-            info_db_ini = print_info_db()
+        print(datetime.now())
+        info_db_ini = print_info_db()
 
         num_mods = 0
         #
@@ -362,10 +379,9 @@ def manter(quitar_borrados:bool = False) -> None:
         con.commit()
         con.close()
 
-        if DEBUG:
-            print(f'\nModificadas un total de {num_mods} entradas.')
-            print_info_db()
-            print(datetime.now())
+        print(f'\nModificadas un total de {num_mods} entradas.')
+        print_info_db()
+        print(datetime.now())
 
 def axuda() -> None:
     print('axuda\t-> Esta mensaxe')

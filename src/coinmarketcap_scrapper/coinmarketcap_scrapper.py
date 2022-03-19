@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/01 20:23:55.455964
-#+ Editado:	2022/03/18 16:48:49.351955
+#+ Editado:	2022/03/19 14:38:12.800827
 # ------------------------------------------------------------------------------
 from typing import Optional, List, Union, Tuple
 from bs4 import BeautifulSoup as bs
@@ -66,7 +66,10 @@ class CoinMarketCap:
         return self.__url
 
     def get_url_pax(self, nova_pax: Optional[int] = 0) -> str:
-        return self.__url+'/?page='+str(nova_pax)
+        return self.__url+f'/?page={nova_pax}'
+
+    def get_url_moeda(self, slug_moeda: str) -> str:
+        return self.__url+f'/currencies/{slug_moeda}/'
 
     def get_reintentos(self) -> int:
         """
@@ -113,8 +116,8 @@ class CoinMarketCap:
 
     # --------------------------------------------------------------------------
 
-    # get_info
-    def get_info(self, reintentos: int = 0) -> dict:
+    # info
+    def info(self, reintentos: int = 0) -> dict:
         """
         Devolve a info xeral sobre o mercado.
 
@@ -154,8 +157,8 @@ class CoinMarketCap:
 
         return dic_info
 
-    # get_top
-    def get_top(self, topx: Optional[int] = 10, reintentos: int = 0) -> List[dict]:
+    # top
+    def top(self, topx: Optional[int] = 10, reintentos: int = 0) -> List[dict]:
         """
         Devolve o top de moedas en CoinMarketCap.
 
@@ -292,8 +295,8 @@ class CoinMarketCap:
             return texto.replace(',','').replace(divisa_ref,'')
         return texto.replace(',','')
 
-    # get_moeda
-    def get_moeda(self, buscado: str, xvalor: Optional[str] = 'nome', reintentos: int = 0) -> dict:
+    # moeda
+    def moeda(self, buscado: str, xvalor: Optional[str] = 'nome', reintentos: int = 0) -> dict:
         """
         Devolve toda a información posible sobre a moeda inquirida.
 
@@ -339,7 +342,7 @@ class CoinMarketCap:
 
         obx_buscado = self.__get_from_db(f'select simbolo, nome, ligazon from moeda where id={id_buscado}', todos=False)
 
-        pax_web = self.r.get(self.get_url()+obx_buscado[2])
+        pax_web = self.r.get(self.get_url_moeda(obx_buscado[2]))
 
         if pax_web.status_code == 404:
             raise ErroPaxinaInaccesibel
