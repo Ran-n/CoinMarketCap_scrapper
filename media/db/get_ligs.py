@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/03 21:05:26.106045
-#+ Editado:	2022/03/19 15:39:52.071772
+#+ Editado:	2022/03/22 22:58:21.439273
 # ------------------------------------------------------------------------------
 
 import sys
@@ -190,10 +190,10 @@ def scrape(cur: Cursor, info_db_ini: Dict[str, str], auxiliar: str, r: Proxy) ->
 
     try:
         if DEBUG: print(f'{datetime.now()}\n* Páxina de {auxiliares[auxiliar][0]}')
-        logging.info(f'Scrape da páxina de {auxiliares[auxiliar][0]}')
+        logging.info(f'Scrape da páxina de {auxiliares[auxiliar][0]}\n')
         paxina_web = r.get(auxiliares[auxiliar][1])
     except KeyError:
-        logging.error('Páxina inexistente')
+        logging.error('Páxina inexistente.\n')
         raise Exception('Páxina inexistente.')
     except Exception as e:
         logging.error(f'{e}')
@@ -203,12 +203,10 @@ def scrape(cur: Cursor, info_db_ini: Dict[str, str], auxiliar: str, r: Proxy) ->
         cant_engadidos = scrape_auxiliar(cur, bs(paxina_web.text, 'html.parser'), info_db_ini, auxiliares[auxiliar][0], r)
         if DEBUG and cant_engadidos == 0:
             print(f'Non se engadiu ningunha entrada da páxina {auxiliares[auxiliar][0]}.')
-            logging.info(f'Non se engadiu ningunha entrada da páxina {auxiliares[auxiliar][0]}.')
+            logging.info(f'Non se engadiu ningunha entrada da páxina {auxiliares[auxiliar][0]}.\n')
     else:
-        if DEBUG: print('Páxina inaccesíbel.')
-        logging.info('Páxina de {auxiliares[auxiliar][0]} inaccesíbel.')
-
-    if DEBUG: print()
+        if DEBUG: print('Páxina inaccesíbel.\n')
+        logging.info('Páxina de {auxiliares[auxiliar][0]} inaccesíbel.\n')
 
 def scrape_inicio(cur: Cursor, info_db_ini: dict, r: Proxy) -> None:
     r.set_verbose(False)
@@ -274,6 +272,7 @@ def manter_aux(moeda: List[str], r: Proxy, cur: Cursor, num_mods: int = 0) -> in
     return num_mods
 
 # ------------------------------------------------------------------------------
+
 
 def scrapi_inicio(cur: Cursor, info_db_ini: dict, r: Proxy) -> None:
 
