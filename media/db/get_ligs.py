@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/03 21:05:26.106045
-#+ Editado:	2022/03/22 22:58:21.439273
+#+ Editado:	2022/03/23 14:51:18.300508
 # ------------------------------------------------------------------------------
 
 import sys
@@ -202,7 +202,7 @@ def scrape(cur: Cursor, info_db_ini: Dict[str, str], auxiliar: str, r: Proxy) ->
     if paxina_web.status_code != 404:
         cant_engadidos = scrape_auxiliar(cur, bs(paxina_web.text, 'html.parser'), info_db_ini, auxiliares[auxiliar][0], r)
         if DEBUG and cant_engadidos == 0:
-            print(f'Non se engadiu ningunha entrada da páxina {auxiliares[auxiliar][0]}.')
+            print(f'Non se engadiu ningunha entrada da páxina {auxiliares[auxiliar][0]}.\n')
             logging.info(f'Non se engadiu ningunha entrada da páxina {auxiliares[auxiliar][0]}.\n')
     else:
         if DEBUG: print('Páxina inaccesíbel.\n')
@@ -317,13 +317,16 @@ def scraping() -> None:
         info_db_ini = print_info_db()
         logging.info(info_db_ini)
 
+        #scrape_inicio(cur, info_db_ini, r)
+        scrapi_inicio(cur, info_db_ini, r)
+
+        print()
+
         scrape(cur, info_db_ini, 'gan_per', r)
         scrape(cur, info_db_ini, 'trending', r)
         scrape(cur, info_db_ini, '+visit', r)
         scrape(cur, info_db_ini, 'novos', r)
 
-        #scrape_inicio(cur, info_db_ini, r)
-        scrapi_inicio(cur, info_db_ini, r)
 
     except KeyboardInterrupt:
         print('\n\nPechando o programa')
