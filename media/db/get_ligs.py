@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/03 21:05:26.106045
-#+ Editado:	2022/03/23 14:51:18.300508
+#+ Editado:	2022/03/24 10:54:16.400319
 # ------------------------------------------------------------------------------
 
 import sys
@@ -86,7 +86,7 @@ def check_monero_db(cur: Cursor, info_db_ini: dict, r: Proxy, simbolo: str, nome
                 }
             logging.info(f'Engadido:\n{monero}\n')
 
-    #return num_engadidos-cant_engadidos
+    return num_engadidos-cant_engadidos
 
 def scrape_auxiliar(cur: Cursor, soup: BeautifulSoup, info_db_ini: Dict[str, str], pax: Optional[Union[int, str]] = None, r: Proxy = None) -> None:
     global num_engadidos
@@ -189,8 +189,8 @@ def scrape(cur: Cursor, info_db_ini: Dict[str, str], auxiliar: str, r: Proxy) ->
             }
 
     try:
-        if DEBUG: print(f'{datetime.now()}\n* Páxina de {auxiliares[auxiliar][0]}')
-        logging.info(f'Scrape da páxina de {auxiliares[auxiliar][0]}\n')
+        if DEBUG: print(f'\n{datetime.now()}\n* Páxina de {auxiliares[auxiliar][0]}.')
+        logging.info(f'Scrape da páxina de {auxiliares[auxiliar][0]}.')
         paxina_web = r.get(auxiliares[auxiliar][1])
     except KeyError:
         logging.error('Páxina inexistente.\n')
@@ -202,10 +202,10 @@ def scrape(cur: Cursor, info_db_ini: Dict[str, str], auxiliar: str, r: Proxy) ->
     if paxina_web.status_code != 404:
         cant_engadidos = scrape_auxiliar(cur, bs(paxina_web.text, 'html.parser'), info_db_ini, auxiliares[auxiliar][0], r)
         if DEBUG and cant_engadidos == 0:
-            print(f'Non se engadiu ningunha entrada da páxina {auxiliares[auxiliar][0]}.\n')
+            print(f'Non se engadiu ningunha entrada da páxina {auxiliares[auxiliar][0]}.')
             logging.info(f'Non se engadiu ningunha entrada da páxina {auxiliares[auxiliar][0]}.\n')
     else:
-        if DEBUG: print('Páxina inaccesíbel.\n')
+        if DEBUG: print('Páxina inaccesíbel.')
         logging.info('Páxina de {auxiliares[auxiliar][0]} inaccesíbel.\n')
 
 def scrape_inicio(cur: Cursor, info_db_ini: dict, r: Proxy) -> None:
@@ -273,7 +273,6 @@ def manter_aux(moeda: List[str], r: Proxy, cur: Cursor, num_mods: int = 0) -> in
 
 # ------------------------------------------------------------------------------
 
-
 def scrapi_inicio(cur: Cursor, info_db_ini: dict, r: Proxy) -> None:
 
     cmc = CoinMarketCap(r= r)
@@ -287,15 +286,19 @@ def scrapi_inicio(cur: Cursor, info_db_ini: dict, r: Proxy) -> None:
     cant_moneroj = datos['totalCount']
     moneroj = datos['cryptoCurrencyList']
 
+    engadidos = 0
     for monero in tqdm(moneroj, desc='Páxina Principal', unit=' monero'):
-        check_monero_db(
-            cur= cur,
-            info_db_ini= info_db_ini,
-            r= r,
-            nome= monero['symbol'],
-            simbolo= monero['name'],
-            ligazon= monero['slug']
-        )
+        engadidos += check_monero_db(
+                            cur= cur,
+                            info_db_ini= info_db_ini,
+                            r= r,
+                            nome= monero['symbol'],
+                            simbolo= monero['name'],
+                            ligazon= monero['slug']
+                        )
+    mensaxe = f'Engadidas un total de {engadidos} entradas.'
+    if DEBUG: print(mensaxe)
+    logging.info(mensaxe+'\n')
 
 # ------------------------------------------------------------------------------
 
@@ -319,8 +322,6 @@ def scraping() -> None:
 
         #scrape_inicio(cur, info_db_ini, r)
         scrapi_inicio(cur, info_db_ini, r)
-
-        print()
 
         scrape(cur, info_db_ini, 'gan_per', r)
         scrape(cur, info_db_ini, 'trending', r)
