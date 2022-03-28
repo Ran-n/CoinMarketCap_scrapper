@@ -323,10 +323,12 @@ def scraping() -> None:
         #scrape_inicio(cur, info_db_ini, r)
         scrapi_inicio(cur, info_db_ini, r)
 
+        """
         scrape(cur, info_db_ini, 'gan_per', r)
         scrape(cur, info_db_ini, 'trending', r)
         scrape(cur, info_db_ini, '+visit', r)
         scrape(cur, info_db_ini, 'novos', r)
+        """
 
 
     except KeyboardInterrupt:
