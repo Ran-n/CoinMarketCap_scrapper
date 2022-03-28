@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/03 21:05:26.106045
-#+ Editado:	2022/03/24 10:54:16.400319
+#+ Editado:	2022/03/28 22:53:30.099083
 # ------------------------------------------------------------------------------
 
 import sys
@@ -323,12 +323,10 @@ def scraping() -> None:
         #scrape_inicio(cur, info_db_ini, r)
         scrapi_inicio(cur, info_db_ini, r)
 
-        """
         scrape(cur, info_db_ini, 'gan_per', r)
         scrape(cur, info_db_ini, 'trending', r)
         scrape(cur, info_db_ini, '+visit', r)
         scrape(cur, info_db_ini, 'novos', r)
-        """
 
 
     except KeyboardInterrupt:
