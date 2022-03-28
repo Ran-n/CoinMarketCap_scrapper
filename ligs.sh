@@ -11,7 +11,7 @@ cd media/db
 echo ''
 read -p 'Copiar ' copiar
 
-if [ -z "$copiar" ] && [ "$copiar" = 's' ]; then
+if [ -n "$copiar" ] && [ "$copiar" = 's' ]; then
     cp -v ligazons.db ../../src/coinmarketcap_scrapper/ligazons.db
 fi
 # ------------------------------------------------------------------------------
