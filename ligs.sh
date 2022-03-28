@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 #+ Autor:  	Ran#
 #+ Creado: 	2022/01/15 17:51:57.572545
-#+ Editado:	2022/03/28 22:52:48.215583
+#+ Editado:	2022/03/28 23:01:39.542544
 # ------------------------------------------------------------------------------
 cd media/db
 ./get_ligs.py $@
@@ -11,6 +11,8 @@ cd media/db
 echo ''
 read -p 'Copiar ' copiar
 
-cp ligazons.db ../../src/coinmarketcap_scrapper/ligazons.db
+if [ -n "$copiar" ] && [ "$copiar" = 's' ]; then
+    cp -v ligazons.db ../../src/coinmarketcap_scrapper/ligazons.db
+fi
 # ------------------------------------------------------------------------------
 
