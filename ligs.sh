@@ -8,11 +8,12 @@
 cd media/db
 ./get_ligs.py $@
 
-echo ''
-read -p 'Copiar ' copiar
+#echo ''
+#read -p 'Copiar ' copiar
 
-if [ -n "$copiar" ] && [ "$copiar" = 's' ]; then
-    cp -v ligazons.db ../../src/coinmarketcap_scrapper/ligazons.db
-fi
+#if [ -n "$copiar" ] && [ "$copiar" = 's' ]; then
+#    cp -v ligazons.db ../../src/coinmarketcap_scrapper/ligazons.db
+#fi
+cp ligazons.db ../../src/coinmarketcap_scrapper/ligazons.db
 # ------------------------------------------------------------------------------
 
