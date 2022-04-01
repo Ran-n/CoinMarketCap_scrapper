@@ -281,7 +281,11 @@ def scrapi_inicio(cur: Cursor, info_db_ini: dict, r: Proxy) -> None:
     cmc.set_timeout(5)
     cmc.set_reintentos(1)
 
-    datos = cmc.crudo()['data']
+    crudo = cmc.crudo()
+
+    #print(crudo)
+
+    datos = crudo['data']
 
     cant_moneroj = datos['totalCount']
     moneroj = datos['cryptoCurrencyList']
